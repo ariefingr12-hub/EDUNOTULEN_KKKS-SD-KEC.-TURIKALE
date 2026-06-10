@@ -724,19 +724,20 @@
             </div>
 
             <div class="print-gallery" id="printPhotosGallery">
-                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // --- 1. CONFIGURATION SUPABASE (GitHub & Vercel Env Ready) ---
+        // --- 1. CONFIGURATION SUPABASE (Telah Diperbaiki & Tersemat Otomatis) ---
         const SUPABASE_URL = "https://wylkasidfbfhowozcuce.supabase.co"; 
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5bGthc2lkZmJmaG93b3pjdWNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTc2ODAsImV4cCI6MjA5NTE3MzY4MH0.JGkdTtl3Nh1LcDeR_dzC1lMiA_IslkQQ3QJFtu3u07A";
         
-        let supabase = null;
+        let supabaseClient = null; // Diubah namanya agar tidak bentrok dengan object CDN
 
         if (SUPABASE_URL !== "YOUR_SUPABASE_PROJECT_URL" && SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY") {
-            supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            // Menginisialisasi client menggunakan object 'supabase' bawaan CDN library
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             document.getElementById('supabaseDot').classList.add('connected');
             document.getElementById('supabaseText').innerText = "Supabase Cloud Terkoneksi secara Real-Time!";
         }
@@ -819,7 +820,7 @@
         function checkAttachmentsVisibility() {
             const zone = document.getElementById('printAttachmentsZone');
             if (uploadedPhotos.length > 0 || dataUndanganFile || dataAbsenFile) {
-                zone.style.style = 'block';
+                zone.style.display = 'block'; // Diperbaiki dari zone.style.style
                 zone.setAttribute("style", "display: block !important;");
             } else {
                 zone.setAttribute("style", "display: none !important;");
@@ -863,13 +864,13 @@
                 created_at: new Date()
             };
 
-            if (!supabase) {
+            if (!supabaseClient) {
                 alert("Simulasi Berhasil! Data Aplikasi Notulen sudah tervalidasi.\n\nUntuk menyimpan langsung ke Cloud Database Supabase secara permanen, silahkan isi variabel SUPABASE_URL & SUPABASE_ANON_KEY di bagian script kode berkas ini.");
                 return;
             }
 
             try {
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('notulensi')
                     .insert([payload])
                     .select();
