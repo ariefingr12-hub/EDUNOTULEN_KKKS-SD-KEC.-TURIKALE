@@ -11,685 +11,157 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* --- HIGH-TECH CORE STYLES & RESET --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
-            --bg-dark: #030712;
-            --panel-bg: rgba(9, 17, 36, 0.65);
-            --panel-border: rgba(0, 242, 254, 0.25);
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent-cyan: #00f2fe;
-            --accent-blue: #38bdf8;
-            --accent-glow: rgba(0, 242, 254, 0.45);
-            --accent-success: #10b981;
+            --bg-dark: #030712; --panel-bg: rgba(9, 17, 36, 0.65); --panel-border: rgba(0, 242, 254, 0.25);
+            --text-primary: #f8fafc; --text-secondary: #94a3b8; --accent-cyan: #00f2fe;
+            --accent-blue: #38bdf8; --accent-glow: rgba(0, 242, 254, 0.45); --accent-success: #10b981;
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-primary);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
+            font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-dark); color: var(--text-primary);
+            min-height: 100vh; overflow-x: hidden; position: relative;
         }
 
-        /* --- MODERN REALISTIC HIGH-TECH BACKGROUND (CYBER AURORA ANIMATION) --- */
         body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                radial-gradient(circle at 15% 20%, rgba(0, 242, 254, 0.18) 0%, transparent 45%),
-                radial-gradient(circle at 85% 75%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
-                linear-gradient(145deg, #020617 0%, #0b1528 50%, #030712 100%);
-            z-index: -2;
-            background-size: 200% 200%;
-            animation: cosmicShift 25s ease infinite;
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 15% 20%, rgba(0, 242, 254, 0.18) 0%, transparent 45%),
+                        radial-gradient(circle at 85% 75%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
+                        linear-gradient(145deg, #020617 0%, #0b1528 50%, #030712 100%);
+            z-index: -2; background-size: 200% 200%; animation: cosmicShift 25s ease infinite;
         }
 
-        @keyframes cosmicShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        @keyframes cosmicShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        /* High-tech grid overlay for depth */
         body::after {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            z-index: -1;
-            pointer-events: none;
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px; z-index: -1; pointer-events: none;
         }
 
-        /* --- LAYOUT CONTAINER --- */
-        .app-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
+        .app-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
 
-        /* --- GLASSMORPHISM HEADER --- */
         header {
-            background: var(--panel-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--panel-border);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background: var(--panel-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--panel-border); border-radius: 20px; padding: 30px; margin-bottom: 30px;
+            text-align: center; position: relative; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            overflow: hidden; display: flex; flex-direction: column; align-items: center;
         }
 
         header::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 4px;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
             background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
         }
 
-        .header-logo {
-            width: 80px;
-            height: auto;
-            margin-bottom: 15px;
-            filter: drop-shadow(0 0 12px var(--accent-glow));
-            transition: transform 0.3s ease;
-        }
+        .header-logo { width: 80px; height: auto; margin-bottom: 15px; filter: drop-shadow(0 0 12px var(--accent-glow)); transition: transform 0.3s ease; }
+        header h1 { font-family: 'Orbitron', sans-serif; font-size: 24px; letter-spacing: 2px; background: linear-gradient(90deg, #fff, var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; text-transform: uppercase; }
+        header p { color: var(--text-secondary); font-size: 14px; font-weight: 300; letter-spacing: 1px; }
 
-        header h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 24px;
-            letter-spacing: 2px;
-            background: linear-gradient(90deg, #fff, var(--accent-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        header p {
-            color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 300;
-            letter-spacing: 1px;
-        }
-
-        /* --- MAIN FORM GLASS PANEL --- */
         .main-panel {
-            background: var(--panel-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--panel-border);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+            background: var(--panel-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--panel-border); border-radius: 24px; padding: 40px; box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
         }
 
-        /* Form Grid Layout */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-            margin-bottom: 30px;
-        }
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; margin-bottom: 30px; }
+        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
+        .full-width { grid-column: 1 / -1; }
 
-        @media (max-width: 768px) {
-            .form-grid { grid-template-columns: 1fr; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        .input-group label { font-size: 13px; font-weight: 600; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+        
+        input[type="text"], input[type="date"], input[type="time"], textarea {
+            background: rgba(5, 12, 28, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px;
+            padding: 14px 16px; color: var(--text-primary); font-family: inherit; font-size: 15px; transition: all 0.3s ease;
         }
+        input:focus, textarea:focus { outline: none; border-color: var(--accent-cyan); box-shadow: 0 0 15px var(--accent-glow); background: rgba(5, 12, 28, 0.9); }
+        textarea { resize: vertical; min-height: 180px; line-height: 1.6; }
 
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        /* --- INPUT STYLES (NEO-CYBER) --- */
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .input-group label {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--accent-cyan);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        input[type="text"],
-        input[type="date"],
-        input[type="time"],
-        textarea {
-            background: rgba(5, 12, 28, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 14px 16px;
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 15px;
-            transition: all 0.3s ease;
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 15px var(--accent-glow);
-            background: rgba(5, 12, 28, 0.9);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 180px;
-            line-height: 1.6;
-        }
-
-        /* --- FILE UPLOAD ZONE STYLES --- */
-        .upload-section {
-            margin-top: 35px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 30px;
-        }
-
-        .upload-section h3 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
-            color: #fff;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .upload-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        @media (max-width: 900px) {
-            .upload-grid { grid-template-columns: 1fr; }
-        }
+        .upload-section { margin-top: 35px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 30px; }
+        .upload-section h3 { font-family: 'Orbitron', sans-serif; font-size: 16px; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        @media (max-width: 900px) { .upload-grid { grid-template-columns: 1fr; } }
 
         .upload-box {
-            background: rgba(255, 255, 255, 0.02);
-            border: 2px dashed rgba(0, 242, 254, 0.25);
-            border-radius: 14px;
-            padding: 25px 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
+            background: rgba(255, 255, 255, 0.02); border: 2px dashed rgba(0, 242, 254, 0.25); border-radius: 14px;
+            padding: 25px 15px; text-align: center; cursor: pointer; transition: all 0.3s ease; position: relative;
         }
+        .upload-box:hover { border-color: var(--accent-cyan); background: rgba(0, 242, 254, 0.04); }
+        .upload-box i { font-size: 32px; color: var(--accent-blue); margin-bottom: 12px; }
+        .upload-box p { font-size: 13px; color: var(--text-secondary); margin-bottom: 5px; }
+        .upload-box span { font-size: 11px; color: rgba(255, 255, 255, 0.3); }
+        .upload-box input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 
-        .upload-box:hover {
-            background: rgba(0, 242, 254, 0.04);
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);
-        }
+        .file-preview-container { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; max-height: 150px; overflow-y: auto; }
+        .file-item { background: rgba(5, 12, 28, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); padding: 8px 12px; border-radius: 6px; display: flex; justify-content: space-between; font-size: 12px; }
+        .file-item span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 80%; }
+        .file-item i { color: #ef4444; cursor: pointer; }
 
-        .upload-box i {
-            font-size: 32px;
-            color: var(--accent-blue);
-            margin-bottom: 12px;
-            transition: transform 0.3s ease;
-        }
+        .gallery-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; margin-top: 12px; }
+        .gallery-img-wrapper { aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .gallery-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 
-        .upload-box p {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 5px;
-        }
+        .action-container { margin-top: 40px; display: flex; justify-content: flex-end; gap: 15px; }
+        .btn { font-family: 'Orbitron', sans-serif; padding: 14px 28px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; border: none; transition: all 0.3s ease; }
+        .btn-print { background: transparent; color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+        .btn-print:hover { background: rgba(0, 242, 254, 0.1); }
+        .btn-primary { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); color: #050c1c; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(0, 242, 254, 0.6); }
 
-        .upload-box span {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.3);
-        }
+        .rekap-panel { margin-top: 40px; }
+        .rekap-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(0, 242, 254, 0.2); padding-bottom: 15px; }
+        .rekap-header h2 { font-family: 'Orbitron', sans-serif; font-size: 18px; color: var(--accent-cyan); }
+        .rekap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+        .rekap-card { background: rgba(5, 12, 28, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px; position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; }
+        .rekap-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+        .rekap-meta { font-size: 12px; color: var(--text-secondary); display: flex; flex-direction: column; gap: 6px; margin-bottom: 15px; }
+        .rekap-body { font-size: 13px; color: rgba(241, 245, 249, 0.85); background: rgba(255, 255, 255, 0.02); padding: 12px; border-radius: 8px; border-left: 3px solid var(--accent-blue); margin-bottom: 15px; max-height: 120px; overflow-y: auto; }
+        .rekap-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px; }
+        
+        .btn-sm { padding: 8px 14px; font-size: 12px; border-radius: 8px; }
+        .btn-delete { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25); }
+        .btn-load-print { background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); border: 1px solid rgba(0, 242, 254, 0.25); }
 
-        .upload-box input[type="file"] {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
+        .status-badge { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; font-size: 12px; color: var(--text-secondary); }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #e11d48; }
+        .status-dot.connected { background: var(--accent-success); box-shadow: 0 0 8px var(--accent-success); }
 
-        .file-preview-container {
-            margin-top: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 150px;
-            overflow-y: auto;
-        }
+        #printable-document { display: none; }
 
-        .file-item {
-            background: rgba(5, 12, 28, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 8px 12px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-        }
-
-        .file-item span {
-            color: var(--text-primary);
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-            max-width: 80%;
-        }
-
-        .file-item i {
-            color: #ef4444;
-            cursor: pointer;
-        }
-
-        .gallery-preview {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .gallery-img-wrapper {
-            position: relative;
-            aspect-ratio: 1;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .gallery-img-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* --- BUTTONS SYSTEM --- */
-        .action-container {
-            margin-top: 40px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-        }
-
-        .btn {
-            font-family: 'Orbitron', sans-serif;
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            border: none;
-        }
-
-        .btn-print {
-            background: transparent;
-            color: var(--accent-cyan);
-            border: 1px solid var(--accent-cyan);
-        }
-
-        .btn-print:hover {
-            background: rgba(0, 242, 254, 0.1);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
-        }
-
-        .btn-primary {
-            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
-            color: #050c1c;
-            box-shadow: 0 4px 20px var(--accent-glow);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(0, 242, 254, 0.6);
-        }
-
-        /* --- CLOUD REKAPITULASI PANEL VIEW --- */
-        .rekap-panel {
-            margin-top: 40px;
-        }
-
-        .rekap-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid rgba(0, 242, 254, 0.2);
-            padding-bottom: 15px;
-        }
-
-        .rekap-header h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 18px;
-            letter-spacing: 1px;
-            background: linear-gradient(90deg, #fff, var(--accent-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .rekap-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-        }
-
-        .rekap-card {
-            background: rgba(5, 12, 28, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 20px;
-            position: relative;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .rekap-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 3px;
-            background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
-            opacity: 0.6;
-        }
-
-        .rekap-card:hover {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.15);
-            transform: translateY(-4px);
-        }
-
-        .rekap-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-
-        .rekap-meta {
-            font-size: 12px;
-            color: var(--text-secondary);
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-bottom: 15px;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .meta-item i {
-            color: var(--accent-cyan);
-            width: 14px;
-        }
-
-        .rekap-body {
-            font-size: 13px;
-            color: rgba(241, 245, 249, 0.85);
-            background: rgba(255, 255, 255, 0.02);
-            padding: 12px;
-            border-radius: 8px;
-            border-left: 3px solid var(--accent-blue);
-            margin-bottom: 15px;
-            white-space: pre-wrap;
-            max-height: 120px;
-            overflow-y: auto;
-        }
-
-        .rekap-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: auto;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding-top: 12px;
-        }
-
-        .btn-sm {
-            padding: 8px 14px;
-            font-size: 12px;
-            border-radius: 8px;
-        }
-
-        .btn-delete {
-            background: rgba(239, 68, 68, 0.1);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.25);
-        }
-
-        .btn-delete:hover {
-            background: #ef4444;
-            color: #fff;
-            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
-        }
-
-        .btn-load-print {
-            background: rgba(0, 242, 254, 0.1);
-            color: var(--accent-cyan);
-            border: 1px solid rgba(0, 242, 254, 0.25);
-        }
-
-        .btn-load-print:hover {
-            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
-            color: #050c1c;
-        }
-
-        .loading-text {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 30px;
-            color: var(--text-secondary);
-            font-style: italic;
-        }
-
-        .status-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 20px;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #e11d48;
-        }
-        .status-dot.connected {
-            background: var(--accent-success);
-            box-shadow: 0 0 8px var(--accent-success);
-        }
-
-        /* --- COMPILED DOCUMENT VIEW (FOR PRINTING PREVIEW) --- */
-        #printable-document {
-            display: none; 
-        }
-
-        /* --- PRINT MEDIA RULES --- */
         @media print {
             body, .app-container, .main-panel, body::before, body::after, .rekap-panel {
-                background: #ffffff !important;
-                color: #000000 !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                box-shadow: none !important;
-                backdrop-filter: none !important;
-                -webkit-backdrop-filter: none !important;
+                background: #ffffff !important; color: #000000 !important; padding: 0 !important; margin: 0 !important;
+                box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
             }
-            
-            header, .main-panel, .action-container, .status-badge, .rekap-panel {
-                display: none !important;
-            }
+            header, .main-panel, .action-container, .status-badge, .rekap-panel { display: none !important; }
+            #printable-document { display: block !important; padding: 40px; font-family: 'Times New Roman', Times, serif; color: #000; line-height: 1.6; }
 
-            #printable-document {
-                display: block !important;
-                padding: 40px;
-                font-family: 'Times New Roman', Times, serif;
-                color: #000;
-                line-height: 1.6;
-            }
-
-            .print-kop {
-                display: flex;
-                align-items: center;
-                border-bottom: 3px double #000;
-                padding-bottom: 15px;
-                margin-bottom: 30px;
-            }
-
-            .print-logo {
-                width: 90px;
-                height: auto;
-                margin-right: 20px;
-                object-fit: contain; 
-            }
-
-            .print-kop-text {
-                flex: 1;
-                text-align: center;
-                text-transform: uppercase;
-                padding-right: 90px; 
-            }
-
+            .print-kop { display: flex; align-items: center; border-bottom: 3px double #000; padding-bottom: 15px; margin-bottom: 30px; }
+            .print-logo { width: 90px; height: auto; margin-right: 20px; object-fit: contain; }
+            .print-kop-text { flex: 1; text-align: center; text-transform: uppercase; padding-right: 90px; }
             .print-kop-text h2 { font-size: 16pt; font-weight: bold; margin-bottom: 5px; }
             .print-kop-text h3 { font-size: 14pt; font-weight: bold; margin-bottom: 5px; }
             .print-kop-text p { font-size: 11pt; text-transform: none; font-style: italic; margin: 0; }
+            .print-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin-bottom: 25px; }
 
-            .print-title {
-                text-align: center;
-                font-size: 14pt;
-                font-weight: bold;
-                text-decoration: underline;
-                margin-bottom: 25px;
-            }
-
-            .print-meta-table {
-                width: 100%;
-                margin-bottom: 25px;
-                border-collapse: collapse;
-            }
-
-            .print-meta-table td {
-                padding: 4px 8px;
-                vertical-align: top;
-                font-size: 11pt;
-            }
-
+            .print-meta-table { width: 100%; margin-bottom: 25px; border-collapse: collapse; }
+            .print-meta-table td { padding: 4px 8px; vertical-align: top; font-size: 11pt; }
             .print-meta-table td.label { width: 22%; font-weight: bold; }
-            .print-meta-table td.colon { width: 3%; }
+            .print-content-title { font-size: 12pt; font-weight: bold; margin-top: 20px; margin-bottom: 8px; border-bottom: 1px solid #000; padding-bottom: 3px; }
+            .print-isi { font-size: 11pt; text-align: justify; white-space: pre-wrap; margin-bottom: 30px; }
+            .print-signatures { margin-top: 50px; width: 100%; page-break-inside: avoid; }
+            .print-signatures td { width: 50%; text-align: center; font-size: 11pt; }
 
-            .print-content-title {
-                font-size: 12pt;
-                font-weight: bold;
-                margin-top: 20px;
-                margin-bottom: 8px;
-                border-bottom: 1px solid #000;
-                padding-bottom: 3px;
-            }
-
-            .print-isi {
-                font-size: 11pt;
-                text-align: justify;
-                white-space: pre-wrap;
-                margin-bottom: 30px;
-            }
-
-            .print-signatures {
-                margin-top: 50px;
-                width: 100%;
-                page-break-inside: avoid;
-            }
-
-            .print-signatures td {
-                width: 50%;
-                text-align: center;
-                font-size: 11pt;
-            }
-
-            .print-attachments-page {
-                page-break-before: always;
-                padding-top: 20px;
-            }
-
-            .print-attachments-title {
-                font-size: 13pt;
-                font-weight: bold;
-                text-align: center;
-                margin-bottom: 25px;
-                text-transform: uppercase;
-                border-bottom: 2px solid #000;
-                padding-bottom: 5px;
-            }
-
-            .print-gallery {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-                margin-top: 15px;
-            }
-
-            .print-gallery-item {
-                border: 1px solid #ccc;
-                padding: 5px;
-                text-align: center;
-                page-break-inside: avoid;
-            }
-
-            .print-gallery-item img {
-                width: 100%;
-                max-height: 220px;
-                object-fit: contain;
-                background: #f9f9f9;
-            }
-
-            .print-gallery-item p {
-                font-size: 9pt;
-                margin-top: 5px;
-                color: #333;
-                font-style: italic;
-            }
+            .print-attachments-page { page-break-before: always; padding-top: 20px; }
+            .print-attachments-title { font-size: 13pt; font-weight: bold; text-align: center; margin-bottom: 25px; text-transform: uppercase; border-bottom: 2px solid #000; padding-bottom: 5px; }
             
-            .attachment-meta-info {
-                font-size: 11pt;
-                margin-bottom: 15px;
-                background: #f5f5f5;
-                padding: 10px;
-                border-left: 4px solid #333;
-            }
+            .attachment-meta-info { font-size: 11pt; margin-bottom: 20px; padding: 10px; border: 1px dashed #666; page-break-inside: avoid; background: #fafafa; }
+            .attachment-meta-info img { display: block; max-width: 100%; max-height: 400px; margin-top: 10px; object-fit: contain; }
+
+            .print-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
+            .print-gallery-item { border: 1px solid #ccc; padding: 5px; text-align: center; page-break-inside: avoid; }
+            .print-gallery-item img { width: 100%; max-height: 250px; object-fit: contain; background: #fff; }
+            .print-gallery-item p { font-size: 9pt; margin-top: 5px; color: #333; font-style: italic; }
         }
     </style>
 </head>
@@ -697,7 +169,7 @@
 
     <div class="app-container">
         <header>
-            <img src="logo.png" alt="Logo KKKS-SD Turikale" class="header-logo" onerror="this.style.display='none'">
+            <img src="logo.png" alt="Logo KKKS-SD" class="header-logo" onerror="this.style.display='none'">
             <h1>Sistem Informasi E-Notulen</h1>
             <p>KKKS-SD Kecamatan Turikale, Kabupaten Maros, Provinsi Sulawesi Selatan</p>
         </header>
@@ -705,73 +177,38 @@
         <main class="main-panel">
             <form id="notulenForm" onsubmit="saveNotulen(event)">
                 <div class="form-grid">
-                    
-                    <div class="input-group full-width">
-                        <label><i class="fa-solid fa-heading"></i> Judul Rapat / Kegiatan</label>
-                        <input type="text" id="judul" required placeholder="Contoh: Rapat Koordinasi Bulanan Kepala Sekolah Dasar se-Turikale">
-                    </div>
-
-                    <div class="input-group">
-                        <label><i class="fa-solid fa-calendar-days"></i> Tanggal Pelaksanaan</label>
-                        <input type="date" id="tanggal" required>
-                    </div>
-
-                    <div class="input-group">
-                        <label><i class="fa-solid fa-clock"></i> Waktu</label>
-                        <input type="time" id="waktu" required>
-                    </div>
-
-                    <div class="input-group">
-                        <label><i class="fa-solid fa-location-dot"></i> Tempat Pelaksanaan</label>
-                        <input type="text" id="tempat" required placeholder="Contoh: Aula SD Negeri 2 Unggulan Maros">
-                    </div>
-
-                    <div class="input-group">
-                        <label><i class="fa-solid fa-user-tie"></i> Pemimpin Rapat</label>
-                        <input type="text" id="pemimpin" required placeholder="Nama Ketua KKKS atau Pejabat Terkait">
-                    </div>
-
-                    <div class="input-group full-width">
-                        <label><i class="fa-solid fa-file-lines"></i> Isi Hasil Notulensi Rapat</label>
-                        <textarea id="isiNotulen" required placeholder="Tuliskan poin-poin penting, pembahasan, hasil keputusan, serta rencana tindak lanjut rapat di sini..."></textarea>
-                    </div>
-
+                    <div class="input-group full-width"><label><i class="fa-solid fa-heading"></i> Judul Kegiatan</label><input type="text" id="judul" required></div>
+                    <div class="input-group"><label><i class="fa-solid fa-calendar-days"></i> Tanggal</label><input type="date" id="tanggal" required></div>
+                    <div class="input-group"><label><i class="fa-solid fa-clock"></i> Waktu</label><input type="time" id="waktu" required></div>
+                    <div class="input-group"><label><i class="fa-solid fa-location-dot"></i> Tempat</label><input type="text" id="tempat" required></div>
+                    <div class="input-group"><label><i class="fa-solid fa-user-tie"></i> Pemimpin Rapat</label><input type="text" id="pemimpin" required></div>
+                    <div class="input-group full-width"><label><i class="fa-solid fa-file-lines"></i> Hasil Notulensi</label><textarea id="isiNotulen" required></textarea></div>
                 </div>
 
                 <div class="upload-section">
                     <h3><i class="fa-solid fa-paperclip"></i> Dokumen Lampiran & Dokumentasi</h3>
                     <div class="upload-grid">
-                        
-                        <div class="upload-box" id="boxUndangan">
-                            <i class="fa-solid fa-envelope-open-text"></i>
-                            <p>Upload Surat Undangan</p>
-                            <span>PDF / Gambar (Maks 1 File)</span>
+                        <div class="upload-box">
+                            <i class="fa-solid fa-envelope-open-text"></i><p>Surat Undangan</p><span>PDF / Gambar</span>
                             <input type="file" id="fileUndangan" accept=".pdf,image/*" onchange="handleSingleFile(this, 'previewUndangan')">
                             <div class="file-preview-container" id="previewUndangan"></div>
                         </div>
-
-                        <div class="upload-box" id="boxAbsen">
-                            <i class="fa-solid fa-clipboard-user"></i>
-                            <p>Upload Daftar Hadir</p>
-                            <span>PDF / Gambar (Maks 1 File)</span>
+                        <div class="upload-box">
+                            <i class="fa-solid fa-clipboard-user"></i><p>Daftar Hadir</p><span>PDF / Gambar</span>
                             <input type="file" id="fileAbsen" accept=".pdf,image/*" onchange="handleSingleFile(this, 'previewAbsen')">
                             <div class="file-preview-container" id="previewAbsen"></div>
                         </div>
-
-                        <div class="upload-box" id="boxFoto">
-                            <i class="fa-solid fa-images"></i>
-                            <p>Upload Foto Kegiatan</p>
-                            <span>Bisa banyak foto sekaligus</span>
+                        <div class="upload-box">
+                            <i class="fa-solid fa-images"></i><p>Foto Kegiatan</p><span>Bisa banyak foto</span>
                             <input type="file" id="fileFoto" accept="image/*" multiple onchange="handleMultipleImages(this)">
                             <div class="gallery-preview" id="previewFotoGallery"></div>
                         </div>
-
                     </div>
                 </div>
 
                 <div class="action-container">
                     <button type="button" class="btn btn-print" onclick="triggerPrint()">
-                        <i class="fa-solid fa-print"></i> Cetak Form Ini
+                        <i class="fa-solid fa-print"></i> Cetak Dokumen Saat Ini
                     </button>
                     <button type="submit" class="btn btn-primary">
                         <i class="fa-solid fa-cloud-arrow-up"></i> Simpan ke Cloud
@@ -779,28 +216,21 @@
                 </div>
             </form>
 
-            <div class="status-badge">
-                <div class="status-dot" id="supabaseDot"></div>
-                <span id="supabaseText">Menghubungkan layanan cloud database...</span>
-            </div>
+            <div class="status-badge"><div class="status-dot" id="supabaseDot"></div><span id="supabaseText">Loading cloud...</span></div>
         </main>
 
         <section class="main-panel rekap-panel">
             <div class="rekap-header">
-                <h2><i class="fa-solid fa-database" style="color: var(--accent-cyan);"></i> Rekapitulasi Hasil Notulen di Cloud</h2>
-                <button type="button" class="btn btn-print btn-sm" onclick="loadNotulensi()">
-                    <i class="fa-solid fa-rotate"></i> Sinkron Ulang
-                </button>
+                <h2><i class="fa-solid fa-database"></i> Rekap Notulen Cloud</h2>
+                <button type="button" class="btn btn-print btn-sm" onclick="loadNotulensi()"><i class="fa-solid fa-rotate"></i> Sinkron Ulang</button>
             </div>
-            <div id="rekapContainer" class="rekap-grid">
-                <div class="loading-text">Menunggu sambungan cloud database...</div>
-            </div>
+            <div id="rekapContainer" class="rekap-grid"><div class="loading-text">Memuat...</div></div>
         </section>
     </div>
 
     <div id="printable-document">
         <div class="print-kop">
-            <img src="logo.png" alt="Logo KKKS-SD" class="print-logo" onerror="this.style.display='none'">
+            <img src="logo.png" alt="Logo" class="print-logo" onerror="this.style.display='none'">
             <div class="print-kop-text">
                 <h2>Kelompok Kerja Kepala Sekolah (KKKS-SD)</h2>
                 <h3>Kecamatan Turikale Kabupaten Maros</h3>
@@ -811,31 +241,11 @@
         <div class="print-title">NOTULEN HASIL RAPAT</div>
 
         <table class="print-meta-table">
-            <tr>
-                <td class="label">Agenda / Kegiatan</td>
-                <td class="colon">:</td>
-                <td id="p-judul">-</td>
-            </tr>
-            <tr>
-                <td class="label">Hari / Tanggal</td>
-                <td class="colon">:</td>
-                <td id="p-tanggal">-</td>
-            </tr>
-            <tr>
-                <td class="label">Waktu</td>
-                <td class="colon">:</td>
-                <td id="p-waktu">-</td>
-            </tr>
-            <tr>
-                <td class="label">Tempat</td>
-                <td class="colon">:</td>
-                <td id="p-tempat">-</td>
-            </tr>
-            <tr>
-                <td class="label">Pemimpin Rapat</td>
-                <td class="colon">:</td>
-                <td id="p-pemimpin">-</td>
-            </tr>
+            <tr><td class="label">Kegiatan</td><td class="colon">:</td><td id="p-judul">-</td></tr>
+            <tr><td class="label">Hari / Tanggal</td><td class="colon">:</td><td id="p-tanggal">-</td></tr>
+            <tr><td class="label">Waktu</td><td class="colon">:</td><td id="p-waktu">-</td></tr>
+            <tr><td class="label">Tempat</td><td class="colon">:</td><td id="p-tempat">-</td></tr>
+            <tr><td class="label">Pemimpin Rapat</td><td class="colon">:</td><td id="p-pemimpin">-</td></tr>
         </table>
 
         <div class="print-content-title">PANDANGAN / HASIL KEPUTUSAN RAPAT:</div>
@@ -843,30 +253,22 @@
 
         <table class="print-signatures">
             <tr>
-                <td>
-                    <p>Mengetahui,</p>
-                    <p style="font-weight: bold; margin-bottom: 60px;">Ketua KKKS-SD Kec. Turikale</p>
-                    <p>( ___________________________ )</p>
-                    <p>NIP. </p>
-                </td>
-                <td>
-                    <p>Maros, <span id="p-current-date"></span></p>
-                    <p style="font-weight: bold; margin-bottom: 60px;">Notulis Rapat</p>
-                    <p>( ___________________________ )</p>
-                    <p>NIP. </p>
-                </td>
+                <td><p>Mengetahui,</p><p style="font-weight: bold; margin-bottom: 60px;">Ketua KKKS-SD Kec. Turikale</p><p>( ___________________________ )</p></td>
+                <td><p>Maros, <span id="p-current-date"></span></p><p style="font-weight: bold; margin-bottom: 60px;">Notulis Rapat</p><p>( ___________________________ )</p></td>
             </tr>
         </table>
 
         <div class="print-attachments-page" id="printAttachmentsZone" style="display: none;">
-            <div class="print-attachments-title">LAMPIRAN DOKUMENTASI & MEDIA</div>
+            <div class="print-attachments-title">LAMPIRAN DOKUMENTASI</div>
             
             <div id="printUndanganMeta" class="attachment-meta-info" style="display: none;">
-                <strong><i class="fa-solid fa-circle-info"></i> Lampiran Surat Undangan:</strong> Berhasil diunggah ke sistem cloud database.
+                <strong><i class="fa-solid fa-envelope"></i> Lampiran Surat Undangan</strong>
+                <div id="printUndanganImage"></div>
             </div>
             
             <div id="printAbsenMeta" class="attachment-meta-info" style="display: none;">
-                <strong><i class="fa-solid fa-circle-info"></i> Lampiran Daftar Hadir:</strong> Berhasil diunggah ke sistem cloud database.
+                <strong><i class="fa-solid fa-users"></i> Lampiran Daftar Hadir</strong>
+                <div id="printAbsenImage"></div>
             </div>
 
             <div class="print-gallery" id="printPhotosGallery"></div>
@@ -874,156 +276,101 @@
     </div>
 
     <script>
-        // --- 1. CONFIGURATION SUPABASE (Fixed Object Shadowing Variable) ---
         const SUPABASE_URL = "https://wylkasidfbfhowozcuce.supabase.co"; 
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5bGthc2lkZmJmaG93b3pjdWNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTc2ODAsImV4cCI6MjA5NTE3MzY4MH0.JGkdTtl3Nh1LcDeR_dzC1lMiA_IslkQQ3QJFtu3u07A";
         
-        let supabaseClient = null; // Nama variabel diganti agar tidak crash dengan library CDN global
-        let localDataNotulensi = []; // Penyimpan data lokal untuk mempermudah cetak rekap
-
-        if (SUPABASE_URL !== "YOUR_SUPABASE_PROJECT_URL" && SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY") {
-            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            document.getElementById('supabaseDot').classList.add('connected');
-            document.getElementById('supabaseText').innerText = "Supabase Cloud Terkoneksi secara Real-Time!";
-            // Panggil rekap data otomatis saat web pertama kali terbuka
-            loadNotulensi();
-        } else {
-            document.getElementById('supabaseText').innerText = "Supabase Mode: Local Mocking (Gagal memuat API Key)";
-        }
-
+        let supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        document.getElementById('supabaseDot').classList.add('connected');
+        document.getElementById('supabaseText').innerText = "Supabase Cloud Terkoneksi secara Real-Time!";
+        
+        let localDataNotulensi = [];
         let uploadedPhotos = [];
         let dataUndanganFile = null;
         let dataAbsenFile = null;
 
-        // --- 2. FETCH & RENDER REKAP DATA FROM SUPABASE ---
+        loadNotulensi();
+
         async function loadNotulensi() {
             const container = document.getElementById('rekapContainer');
-            if (!supabaseClient) {
-                container.innerHTML = '<div class="loading-text" style="color: #ef4444;"><i class="fa-solid fa-circle-exclamation"></i> Hubungkan API Supabase terlebih dahulu.</div>';
-                return;
-            }
-
-            container.innerHTML = '<div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> Memuat rekap data dari database cloud...</div>';
-
+            container.innerHTML = '<div class="loading-text">Memuat rekap data...</div>';
             try {
-                const { data, error } = await supabaseClient
-                    .from('notulensi')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-
+                const { data, error } = await supabaseClient.from('notulensi').select('*').order('created_at', { ascending: false });
                 if (error) throw error;
-
                 localDataNotulensi = data;
-                
-                if (!data || data.length === 0) {
-                    container.innerHTML = '<div class="loading-text"><i class="fa-solid fa-folder-open"></i> Belum ada rekaman notulensi di cloud database.</div>';
-                    return;
-                }
-
+                if (!data || data.length === 0) { container.innerHTML = '<div class="loading-text">Belum ada rekaman notulensi di cloud.</div>'; return; }
                 container.innerHTML = "";
                 data.forEach(item => {
-                    let formattedDate = item.tanggal;
-                    if(item.tanggal) {
-                        const d = new Date(item.tanggal);
-                        formattedDate = d.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-                    }
-
-                    const card = document.createElement('div');
-                    card.className = 'rekap-card';
+                    const card = document.createElement('div'); card.className = 'rekap-card';
                     card.innerHTML = `
                         <div>
-                            <div class="rekap-title">${escapeHtml(item.judul)}</div>
-                            <div class="rekap-meta">
-                                <div class="meta-item"><i class="fa-solid fa-calendar-days"></i> ${formattedDate} - ${item.waktu || ''} WITA</div>
-                                <div class="meta-item"><i class="fa-solid fa-location-dot"></i> ${escapeHtml(item.tempat)}</div>
-                                <div class="meta-item"><i class="fa-solid fa-user-tie"></i> Pemimpin: ${escapeHtml(item.pemimpin_rapat)}</div>
-                            </div>
-                            <div class="rekap-body">${escapeHtml(item.isi_notulen)}</div>
+                            <div class="rekap-title">${item.judul}</div>
+                            <div class="rekap-meta"><div class="meta-item"><i class="fa-solid fa-calendar-days"></i> ${item.tanggal}</div></div>
+                            <div class="rekap-body">${item.isi_notulen}</div>
                         </div>
                         <div class="rekap-actions">
-                            <button class="btn btn-sm btn-delete" onclick="deleteNotulen(${item.id})">
-                                <i class="fa-solid fa-trash-can"></i> Hapus
-                            </button>
-                            <button class="btn btn-sm btn-load-print" onclick="triggerPrintFromData(${item.id})">
-                                <i class="fa-solid fa-print"></i> Cetak
-                            </button>
+                            <button class="btn btn-sm btn-delete" onclick="deleteNotulen(${item.id})">Hapus</button>
+                            <button class="btn btn-sm btn-load-print" onclick="triggerPrintFromData(${item.id})">Cetak Arsip</button>
                         </div>
                     `;
                     container.appendChild(card);
                 });
-
-            } catch (err) {
-                container.innerHTML = `<div class="loading-text" style="color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> Gagal sinkronisasi data: ${err.message}</div>`;
-            }
+            } catch (err) {}
         }
 
-        // --- 3. DELETE FUNCTION FROM CLOUD ---
         async function deleteNotulen(id) {
-            if (!confirm("Apakah Anda yakin ingin menghapus data hasil notulen ini secara PERMANEN dari Database Cloud?")) return;
-
-            try {
-                const { error } = await supabaseClient
-                    .from('notulensi')
-                    .delete()
-                    .eq('id', id);
-
-                if (error) throw error;
-
-                alert("Sukses! Data notulensi berhasil dihapus dari cloud database.");
-                loadNotulensi(); // Segera refresh rekap setelah dihapus
-            } catch (err) {
-                alert("Gagal menghapus data: " + err.message);
-            }
+            if (!confirm("Hapus permanen data ini?")) return;
+            await supabaseClient.from('notulensi').delete().eq('id', id);
+            loadNotulensi();
         }
 
-        // --- 4. PRINT PREVIOUS RECORD DIRECTLY ---
         function triggerPrintFromData(id) {
             const item = localDataNotulensi.find(x => x.id === id);
             if (!item) return;
-
             document.getElementById('p-judul').innerText = item.judul || '-';
-            
-            if(item.tanggal) {
-                const dateObj = new Date(item.tanggal);
-                document.getElementById('p-tanggal').innerText = dateObj.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            } else {
-                document.getElementById('p-tanggal').innerText = '-';
-            }
-
-            document.getElementById('p-waktu').innerText = item.waktu ? item.waktu + ' WITA' : '-';
+            document.getElementById('p-tanggal').innerText = item.tanggal || '-';
+            document.getElementById('p-waktu').innerText = item.waktu || '-';
             document.getElementById('p-tempat').innerText = item.tempat || '-';
             document.getElementById('p-pemimpin').innerText = item.pemimpin_rapat || '-';
             document.getElementById('p-isi').innerText = item.isi_notulen || '-';
+            document.getElementById('p-current-date').innerText = new Date().toLocaleDateString('id-ID');
             
-            const today = new Date();
-            document.getElementById('p-current-date').innerText = today.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-
-            // Sembunyikan lampiran dinamis form pada pencetakan arsip rekap database
+            // Sembunyikan lampiran untuk data lama dari cloud (karena hanya teks yang disimpan saat ini)
             document.getElementById('printAttachmentsZone').setAttribute("style", "display: none !important;");
-
             window.print();
         }
 
-        // --- 5. FILE HANDLING CONTROLLERS ---
+        // --- SISTEM RENDER GAMBAR KE HALAMAN CETAK ---
         function handleSingleFile(input, previewId) {
-            const container = document.getElementById(previewId);
-            container.innerHTML = ""; 
-
+            const container = document.getElementById(previewId); container.innerHTML = ""; 
             if (input.files && input.files[0]) {
                 const file = input.files[0];
-                if(previewId === 'previewUndangan') dataUndanganFile = file;
-                if(previewId === 'previewAbsen') dataAbsenFile = file;
+                const isImage = file.type.startsWith('image/');
 
-                const item = document.createElement('div');
-                item.className = 'file-item';
-                item.innerHTML = `
-                    <span><i class="fa-solid fa-file-circle-check" style="color:#00f2fe"></i> ${file.name}</span>
-                    <i class="fa-solid fa-trash-can" onclick="removeSingleFile('${previewId}')"></i>
-                `;
-                container.appendChild(item);
-                
-                if(previewId === 'previewUndangan') document.getElementById('printUndanganMeta').style.display = 'block';
-                if(previewId === 'previewAbsen') document.getElementById('printAbsenMeta').style.display = 'block';
+                if(previewId === 'previewUndangan') {
+                    dataUndanganFile = file;
+                    document.getElementById('printUndanganMeta').style.display = 'block';
+                    if(isImage){
+                        const reader = new FileReader();
+                        reader.onload = e => document.getElementById('printUndanganImage').innerHTML = `<img src="${e.target.result}">`;
+                        reader.readAsDataURL(file);
+                    } else {
+                        document.getElementById('printUndanganImage').innerHTML = `<p style="margin-top:10px; font-style:italic;">[Dokumen Undangan berformat PDF]</p>`;
+                    }
+                }
+
+                if(previewId === 'previewAbsen') {
+                    dataAbsenFile = file;
+                    document.getElementById('printAbsenMeta').style.display = 'block';
+                    if(isImage){
+                        const reader = new FileReader();
+                        reader.onload = e => document.getElementById('printAbsenImage').innerHTML = `<img src="${e.target.result}">`;
+                        reader.readAsDataURL(file);
+                    } else {
+                        document.getElementById('printAbsenImage').innerHTML = `<p style="margin-top:10px; font-style:italic;">[Dokumen Daftar Hadir berformat PDF]</p>`;
+                    }
+                }
+
+                container.innerHTML = `<div class="file-item"><span><i class="fa-solid fa-file-circle-check"></i> ${file.name}</span><i class="fa-solid fa-trash-can" onclick="removeSingleFile('${previewId}')"></i></div>`;
                 checkAttachmentsVisibility();
             }
         }
@@ -1031,43 +378,25 @@
         function removeSingleFile(previewId) {
             document.getElementById(previewId).innerHTML = "";
             if(previewId === 'previewUndangan') {
-                document.getElementById('fileUndangan').value = "";
-                dataUndanganFile = null;
-                document.getElementById('printUndanganMeta').style.display = 'none';
+                document.getElementById('fileUndangan').value = ""; dataUndanganFile = null;
+                document.getElementById('printUndanganMeta').style.display = 'none'; document.getElementById('printUndanganImage').innerHTML = "";
             }
             if(previewId === 'previewAbsen') {
-                document.getElementById('fileAbsen').value = "";
-                dataAbsenFile = null;
-                document.getElementById('printAbsenMeta').style.display = 'none';
+                document.getElementById('fileAbsen').value = ""; dataAbsenFile = null;
+                document.getElementById('printAbsenMeta').style.display = 'none'; document.getElementById('printAbsenImage').innerHTML = "";
             }
             checkAttachmentsVisibility();
         }
 
         function handleMultipleImages(input) {
-            const galleryContainer = document.getElementById('previewFotoGallery');
-            const printGalleryContainer = document.getElementById('printPhotosGallery');
-
             if (input.files) {
                 Array.from(input.files).forEach(file => {
                     if (!file.type.startsWith('image/')) return;
-
                     const reader = new FileReader();
                     reader.onload = function(e) {
-                        const base64Data = e.target.result;
-                        uploadedPhotos.push({ name: file.name, data: base64Data, rawFile: file });
-
-                        const wrapper = document.createElement('div');
-                        wrapper.className = 'gallery-img-wrapper';
-                        wrapper.innerHTML = `<img src="${base64Data}" alt="kegiatan">`;
-                        galleryContainer.appendChild(wrapper);
-
-                        const printItem = document.createElement('div');
-                        printItem.className = 'print-gallery-item';
-                        printItem.innerHTML = `
-                            <img src="${base64Data}">
-                            <p>Dokumentasi Kegiatan: ${file.name}</p>
-                        `;
-                        printGalleryContainer.appendChild(printItem);
+                        uploadedPhotos.push(file);
+                        document.getElementById('previewFotoGallery').innerHTML += `<div class="gallery-img-wrapper"><img src="${e.target.result}"></div>`;
+                        document.getElementById('printPhotosGallery').innerHTML += `<div class="print-gallery-item"><img src="${e.target.result}"><p>Kegiatan: ${file.name}</p></div>`;
                         checkAttachmentsVisibility();
                     }
                     reader.readAsDataURL(file);
@@ -1084,81 +413,37 @@
             }
         }
 
-        // --- 6. PRINT SYSTEM FORM ---
         function triggerPrint() {
-            document.getElementById('p-judul').innerText = document.getElementById('judul').value || '........................................................................';
-            
-            const rawDate = document.getElementById('tanggal').value;
-            if(rawDate) {
-                const dateObj = new Date(rawDate);
-                document.getElementById('p-tanggal').innerText = dateObj.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            } else {
-                document.getElementById('p-tanggal').innerText = '........................................................................';
-            }
+            // Memastikan area gambar lampiran terbuka paksa sebelum browser memanggil Print
+            checkAttachmentsVisibility(); 
 
-            document.getElementById('p-waktu').innerText = document.getElementById('waktu').value ? document.getElementById('waktu').value + ' WITA' : '........................................................................';
-            document.getElementById('p-tempat').innerText = document.getElementById('tempat').value || '........................................................................';
-            document.getElementById('p-pemimpin').innerText = document.getElementById('pemimpin').value || '........................................................................';
-            document.getElementById('p-isi').innerText = document.getElementById('isiNotulen').value || '............................................................................................................................................................................................................................................................................................................';
-            
-            const today = new Date();
-            document.getElementById('p-current-date').innerText = today.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
-
+            document.getElementById('p-judul').innerText = document.getElementById('judul').value || '-';
+            document.getElementById('p-tanggal').innerText = document.getElementById('tanggal').value || '-';
+            document.getElementById('p-waktu').innerText = document.getElementById('waktu').value || '-';
+            document.getElementById('p-tempat').innerText = document.getElementById('tempat').value || '-';
+            document.getElementById('p-pemimpin').innerText = document.getElementById('pemimpin').value || '-';
+            document.getElementById('p-isi').innerText = document.getElementById('isiNotulen').value || '-';
+            document.getElementById('p-current-date').innerText = new Date().toLocaleDateString('id-ID');
             window.print();
         }
 
-        // --- 7. CLOUD SAVE ACTIONS ---
         async function saveNotulen(event) {
             event.preventDefault();
-
             const payload = {
-                judul: document.getElementById('judul').value,
-                tanggal: document.getElementById('tanggal').value,
-                waktu: document.getElementById('waktu').value,
-                tempat: document.getElementById('tempat').value,
-                pemimpin_rapat: document.getElementById('pemimpin').value,
-                isi_notulen: document.getElementById('isiNotulen').value,
+                judul: document.getElementById('judul').value, tanggal: document.getElementById('tanggal').value,
+                waktu: document.getElementById('waktu').value, tempat: document.getElementById('tempat').value,
+                pemimpin_rapat: document.getElementById('pemimpin').value, isi_notulen: document.getElementById('isiNotulen').value,
                 created_at: new Date()
             };
-
-            if (!supabaseClient) {
-                alert("Simulasi Gagal! API Supabase Belum Terkoneksi.");
-                return;
-            }
-
             try {
-                const { data, error } = await supabaseClient
-                    .from('notulensi')
-                    .insert([payload])
-                    .select();
-
-                if (error) throw error;
-
-                alert("Luar Biasa! Notulen berhasil diunggah dan disimpan aman ke Cloud Supabase.");
+                await supabaseClient.from('notulensi').insert([payload]);
+                alert("Berhasil disimpan ke Cloud!");
                 document.getElementById('notulenForm').reset();
                 document.getElementById('previewFotoGallery').innerHTML = "";
-                document.getElementById('previewUndangan').innerHTML = "";
-                document.getElementById('previewAbsen').innerHTML = "";
-                uploadedPhotos = [];
-                checkAttachmentsVisibility();
-                
-                // Refresh daftar rekapitulasi agar data yang baru masuk langsung muncul
-                loadNotulensi();
-
-            } catch (err) {
-                alert("Terjadi kesalahan jaringan cloud: " + err.message);
-            }
-        }
-
-        // Helper anti HTML injection
-        function escapeHtml(text) {
-            if (!text) return '';
-            return text
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+                document.getElementById('printPhotosGallery').innerHTML = "";
+                removeSingleFile('previewUndangan'); removeSingleFile('previewAbsen');
+                uploadedPhotos = []; checkAttachmentsVisibility(); loadNotulensi();
+            } catch (err) { alert("Error: " + err.message); }
         }
     </script>
 </body>
