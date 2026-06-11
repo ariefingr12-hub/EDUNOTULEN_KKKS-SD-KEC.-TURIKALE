@@ -11,6 +11,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
+        /* ========================================================
+           1. TAMPILAN LAYAR (UI) - MODERN CYBER/GLASSMORPHISM
+           ======================================================== */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
             --bg-dark: #030712; --panel-bg: rgba(9, 17, 36, 0.65); --panel-border: rgba(0, 242, 254, 0.25);
@@ -18,22 +21,17 @@
             --accent-blue: #38bdf8; --accent-glow: rgba(0, 242, 254, 0.45); --accent-success: #10b981;
         }
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-dark); color: var(--text-primary);
-            min-height: 100vh; overflow-x: hidden; position: relative;
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-dark); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; position: relative; }
 
+        /* Background Aurora Berjalan */
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 15% 20%, rgba(0, 242, 254, 0.18) 0%, transparent 45%),
-                        radial-gradient(circle at 85% 75%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
-                        linear-gradient(145deg, #020617 0%, #0b1528 50%, #030712 100%);
+            background: radial-gradient(circle at 15% 20%, rgba(0, 242, 254, 0.18) 0%, transparent 45%), radial-gradient(circle at 85% 75%, rgba(168, 85, 247, 0.15) 0%, transparent 50%), radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 40%), linear-gradient(145deg, #020617 0%, #0b1528 50%, #030712 100%);
             z-index: -2; background-size: 200% 200%; animation: cosmicShift 25s ease infinite;
         }
-
         @keyframes cosmicShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
+        /* Grid Background Overlay */
         body::after {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
@@ -42,65 +40,48 @@
 
         .app-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
 
-        header {
-            background: var(--panel-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--panel-border); border-radius: 20px; padding: 30px; margin-bottom: 30px;
-            text-align: center; position: relative; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            overflow: hidden; display: flex; flex-direction: column; align-items: center;
-        }
-
-        header::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
-            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
-        }
-
+        /* Header UI */
+        header { background: var(--panel-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--panel-border); border-radius: 20px; padding: 30px; margin-bottom: 30px; text-align: center; position: relative; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); overflow: hidden; display: flex; flex-direction: column; align-items: center; }
+        header::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
         .header-logo { width: 80px; height: auto; margin-bottom: 15px; filter: drop-shadow(0 0 12px var(--accent-glow)); transition: transform 0.3s ease; }
         header h1 { font-family: 'Orbitron', sans-serif; font-size: 24px; letter-spacing: 2px; background: linear-gradient(90deg, #fff, var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; text-transform: uppercase; }
         header p { color: var(--text-secondary); font-size: 14px; font-weight: 300; letter-spacing: 1px; }
 
-        .main-panel {
-            background: var(--panel-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--panel-border); border-radius: 24px; padding: 40px; box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
-        }
-
+        /* Panel Form Utama */
+        .main-panel { background: var(--panel-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--panel-border); border-radius: 24px; padding: 40px; box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4); }
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; margin-bottom: 30px; }
         @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
         .full-width { grid-column: 1 / -1; }
-
         .input-group { display: flex; flex-direction: column; gap: 8px; }
         .input-group label { font-size: 13px; font-weight: 600; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
-        
-        input[type="text"], input[type="date"], input[type="time"], textarea {
-            background: rgba(5, 12, 28, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px;
-            padding: 14px 16px; color: var(--text-primary); font-family: inherit; font-size: 15px; transition: all 0.3s ease;
-        }
+        input[type="text"], input[type="date"], input[type="time"], textarea { background: rgba(5, 12, 28, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 14px 16px; color: var(--text-primary); font-family: inherit; font-size: 15px; transition: all 0.3s ease; width: 100%; }
         input:focus, textarea:focus { outline: none; border-color: var(--accent-cyan); box-shadow: 0 0 15px var(--accent-glow); background: rgba(5, 12, 28, 0.9); }
         textarea { resize: vertical; min-height: 180px; line-height: 1.6; }
 
+        /* Zona Upload UI */
         .upload-section { margin-top: 35px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 30px; }
         .upload-section h3 { font-family: 'Orbitron', sans-serif; font-size: 16px; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        .upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
         @media (max-width: 900px) { .upload-grid { grid-template-columns: 1fr; } }
-
-        .upload-box {
-            background: rgba(255, 255, 255, 0.02); border: 2px dashed rgba(0, 242, 254, 0.25); border-radius: 14px;
-            padding: 25px 15px; text-align: center; cursor: pointer; transition: all 0.3s ease; position: relative;
-        }
+        
+        .upload-wrapper { display: flex; flex-direction: column; gap: 10px; }
+        .upload-box { background: rgba(255, 255, 255, 0.02); border: 2px dashed rgba(0, 242, 254, 0.25); border-radius: 14px; padding: 25px 15px; text-align: center; cursor: pointer; transition: all 0.3s ease; position: relative; }
         .upload-box:hover { border-color: var(--accent-cyan); background: rgba(0, 242, 254, 0.04); }
         .upload-box i { font-size: 32px; color: var(--accent-blue); margin-bottom: 12px; }
         .upload-box p { font-size: 13px; color: var(--text-secondary); margin-bottom: 5px; }
         .upload-box span { font-size: 11px; color: rgba(255, 255, 255, 0.3); }
-        .upload-box input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-
-        .file-preview-container { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; max-height: 150px; overflow-y: auto; }
-        .file-item { background: rgba(5, 12, 28, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); padding: 8px 12px; border-radius: 6px; display: flex; justify-content: space-between; font-size: 12px; }
+        .upload-box input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 5; }
+        
+        .file-preview-container { display: flex; flex-direction: column; gap: 8px; max-height: 150px; overflow-y: auto; text-align: left; }
+        .file-item { background: rgba(5, 12, 28, 0.8); border: 1px solid rgba(0, 242, 254, 0.3); padding: 8px 12px; border-radius: 6px; display: flex; justify-content: space-between; font-size: 12px; align-items: center; position: relative; z-index: 10; }
         .file-item span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 80%; }
-        .file-item i { color: #ef4444; cursor: pointer; }
-
-        .gallery-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; margin-top: 12px; }
-        .gallery-img-wrapper { aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .file-item i { color: #ef4444; cursor: pointer; font-size: 14px; padding: 5px; }
+        
+        .gallery-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; }
+        .gallery-img-wrapper { aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); position: relative; }
         .gallery-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 
+        /* Tombol UI */
         .action-container { margin-top: 40px; display: flex; justify-content: flex-end; gap: 15px; }
         .btn { font-family: 'Orbitron', sans-serif; padding: 14px 28px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; border: none; transition: all 0.3s ease; }
         .btn-print { background: transparent; color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
@@ -108,34 +89,36 @@
         .btn-primary { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); color: #050c1c; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(0, 242, 254, 0.6); }
 
+        /* Rekap Cloud UI */
         .rekap-panel { margin-top: 40px; }
         .rekap-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(0, 242, 254, 0.2); padding-bottom: 15px; }
         .rekap-header h2 { font-family: 'Orbitron', sans-serif; font-size: 18px; color: var(--accent-cyan); }
         .rekap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-        .rekap-card { background: rgba(5, 12, 28, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px; position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; }
+        .rekap-card { background: rgba(5, 12, 28, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; }
         .rekap-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 12px; }
-        .rekap-meta { font-size: 12px; color: var(--text-secondary); display: flex; flex-direction: column; gap: 6px; margin-bottom: 15px; }
-        .rekap-body { font-size: 13px; color: rgba(241, 245, 249, 0.85); background: rgba(255, 255, 255, 0.02); padding: 12px; border-radius: 8px; border-left: 3px solid var(--accent-blue); margin-bottom: 15px; max-height: 120px; overflow-y: auto; }
-        .rekap-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px; }
+        .rekap-meta { font-size: 12px; color: var(--text-secondary); margin-bottom: 15px; line-height: 1.8; }
+        .rekap-body { font-size: 13px; color: rgba(241, 245, 249, 0.85); background: rgba(255, 255, 255, 0.02); padding: 12px; border-radius: 8px; border-left: 3px solid var(--accent-blue); margin-bottom: 15px; max-height: 120px; overflow-y: auto; white-space: pre-wrap; }
+        .rekap-actions { display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px; }
         
         .btn-sm { padding: 8px 14px; font-size: 12px; border-radius: 8px; }
         .btn-delete { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25); }
         .btn-load-print { background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); border: 1px solid rgba(0, 242, 254, 0.25); }
+        .btn-view-file { background: rgba(16, 185, 129, 0.1); color: var(--accent-success); border: 1px solid rgba(16, 185, 129, 0.25); text-decoration: none; display: inline-flex; align-items: center; justify-content: center;}
 
         .status-badge { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; font-size: 12px; color: var(--text-secondary); }
         .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #e11d48; }
         .status-dot.connected { background: var(--accent-success); box-shadow: 0 0 8px var(--accent-success); }
+        .status-dot.uploading { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
+        /* ========================================================
+           2. FORMAT KERTAS CETAK (PRINT) - RESMI & FORMAL
+           ======================================================== */
         #printable-document { display: none; }
-
         @media print {
-            body, .app-container, .main-panel, body::before, body::after, .rekap-panel {
-                background: #ffffff !important; color: #000000 !important; padding: 0 !important; margin: 0 !important;
-                box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
-            }
+            body, .app-container, .main-panel, body::before, body::after, .rekap-panel { background: #ffffff !important; color: #000000 !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
             header, .main-panel, .action-container, .status-badge, .rekap-panel { display: none !important; }
             #printable-document { display: block !important; padding: 40px; font-family: 'Times New Roman', Times, serif; color: #000; line-height: 1.6; }
-
             .print-kop { display: flex; align-items: center; border-bottom: 3px double #000; padding-bottom: 15px; margin-bottom: 30px; }
             .print-logo { width: 90px; height: auto; margin-right: 20px; object-fit: contain; }
             .print-kop-text { flex: 1; text-align: center; text-transform: uppercase; padding-right: 90px; }
@@ -143,7 +126,6 @@
             .print-kop-text h3 { font-size: 14pt; font-weight: bold; margin-bottom: 5px; }
             .print-kop-text p { font-size: 11pt; text-transform: none; font-style: italic; margin: 0; }
             .print-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin-bottom: 25px; }
-
             .print-meta-table { width: 100%; margin-bottom: 25px; border-collapse: collapse; }
             .print-meta-table td { padding: 4px 8px; vertical-align: top; font-size: 11pt; }
             .print-meta-table td.label { width: 22%; font-weight: bold; }
@@ -151,17 +133,15 @@
             .print-isi { font-size: 11pt; text-align: justify; white-space: pre-wrap; margin-bottom: 30px; }
             .print-signatures { margin-top: 50px; width: 100%; page-break-inside: avoid; }
             .print-signatures td { width: 50%; text-align: center; font-size: 11pt; }
-
+            
             .print-attachments-page { page-break-before: always; padding-top: 20px; }
             .print-attachments-title { font-size: 13pt; font-weight: bold; text-align: center; margin-bottom: 25px; text-transform: uppercase; border-bottom: 2px solid #000; padding-bottom: 5px; }
-            
-            .attachment-meta-info { font-size: 11pt; margin-bottom: 20px; padding: 10px; border: 1px dashed #666; page-break-inside: avoid; background: #fafafa; }
-            .attachment-meta-info img { display: block; max-width: 100%; max-height: 400px; margin-top: 10px; object-fit: contain; }
-
+            .attachment-meta-info { font-size: 11pt; margin-bottom: 20px; padding: 15px; border: 1px dashed #666; page-break-inside: avoid; background: #fafafa; }
+            .attachment-meta-info img { display: block; max-width: 100%; max-height: 500px; margin-top: 15px; object-fit: contain; border: 1px solid #ddd; }
             .print-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
-            .print-gallery-item { border: 1px solid #ccc; padding: 5px; text-align: center; page-break-inside: avoid; }
-            .print-gallery-item img { width: 100%; max-height: 250px; object-fit: contain; background: #fff; }
-            .print-gallery-item p { font-size: 9pt; margin-top: 5px; color: #333; font-style: italic; }
+            .print-gallery-item { border: 1px solid #ccc; padding: 10px; text-align: center; page-break-inside: avoid; }
+            .print-gallery-item img { width: 100%; max-height: 300px; object-fit: contain; background: #fff; }
+            .print-gallery-item p { font-size: 9pt; margin-top: 8px; color: #333; font-style: italic; }
         }
     </style>
 </head>
@@ -177,30 +157,36 @@
         <main class="main-panel">
             <form id="notulenForm" onsubmit="saveNotulen(event)">
                 <div class="form-grid">
-                    <div class="input-group full-width"><label><i class="fa-solid fa-heading"></i> Judul Kegiatan</label><input type="text" id="judul" required></div>
+                    <div class="input-group full-width"><label><i class="fa-solid fa-heading"></i> Judul Kegiatan</label><input type="text" id="judul" required placeholder="Contoh: Rapat Koordinasi Bulanan"></div>
                     <div class="input-group"><label><i class="fa-solid fa-calendar-days"></i> Tanggal</label><input type="date" id="tanggal" required></div>
                     <div class="input-group"><label><i class="fa-solid fa-clock"></i> Waktu</label><input type="time" id="waktu" required></div>
-                    <div class="input-group"><label><i class="fa-solid fa-location-dot"></i> Tempat</label><input type="text" id="tempat" required></div>
-                    <div class="input-group"><label><i class="fa-solid fa-user-tie"></i> Pemimpin Rapat</label><input type="text" id="pemimpin" required></div>
-                    <div class="input-group full-width"><label><i class="fa-solid fa-file-lines"></i> Hasil Notulensi</label><textarea id="isiNotulen" required></textarea></div>
+                    <div class="input-group"><label><i class="fa-solid fa-location-dot"></i> Tempat</label><input type="text" id="tempat" required placeholder="Contoh: Aula SD Negeri 2"></div>
+                    <div class="input-group"><label><i class="fa-solid fa-user-tie"></i> Pemimpin Rapat</label><input type="text" id="pemimpin" required placeholder="Nama Pemimpin"></div>
+                    <div class="input-group full-width"><label><i class="fa-solid fa-file-lines"></i> Hasil Notulensi</label><textarea id="isiNotulen" required placeholder="Tuliskan hasil rapat..."></textarea></div>
                 </div>
 
                 <div class="upload-section">
                     <h3><i class="fa-solid fa-paperclip"></i> Dokumen Lampiran & Dokumentasi</h3>
                     <div class="upload-grid">
-                        <div class="upload-box">
-                            <i class="fa-solid fa-envelope-open-text"></i><p>Surat Undangan</p><span>PDF / Gambar</span>
-                            <input type="file" id="fileUndangan" accept=".pdf,image/*" onchange="handleSingleFile(this, 'previewUndangan')">
+                        <div class="upload-wrapper">
+                            <div class="upload-box">
+                                <i class="fa-solid fa-envelope-open-text"></i><p>Surat Undangan</p><span>PDF / Gambar</span>
+                                <input type="file" id="fileUndangan" accept=".pdf,image/*" onchange="handleSingleFile(this, 'previewUndangan')">
+                            </div>
                             <div class="file-preview-container" id="previewUndangan"></div>
                         </div>
-                        <div class="upload-box">
-                            <i class="fa-solid fa-clipboard-user"></i><p>Daftar Hadir</p><span>PDF / Gambar</span>
-                            <input type="file" id="fileAbsen" accept=".pdf,image/*" onchange="handleSingleFile(this, 'previewAbsen')">
+                        <div class="upload-wrapper">
+                            <div class="upload-box">
+                                <i class="fa-solid fa-clipboard-user"></i><p>Daftar Hadir</p><span>PDF / Gambar</span>
+                                <input type="file" id="fileAbsen" accept=".pdf,image/*" onchange="handleSingleFile(this, 'previewAbsen')">
+                            </div>
                             <div class="file-preview-container" id="previewAbsen"></div>
                         </div>
-                        <div class="upload-box">
-                            <i class="fa-solid fa-images"></i><p>Foto Kegiatan</p><span>Bisa banyak foto</span>
-                            <input type="file" id="fileFoto" accept="image/*" multiple onchange="handleMultipleImages(this)">
+                        <div class="upload-wrapper">
+                            <div class="upload-box">
+                                <i class="fa-solid fa-images"></i><p>Foto Kegiatan</p><span>Bisa banyak foto</span>
+                                <input type="file" id="fileFoto" accept="image/*" multiple onchange="handleMultipleImages(this)">
+                            </div>
                             <div class="gallery-preview" id="previewFotoGallery"></div>
                         </div>
                     </div>
@@ -208,15 +194,14 @@
 
                 <div class="action-container">
                     <button type="button" class="btn btn-print" onclick="triggerPrint()">
-                        <i class="fa-solid fa-print"></i> Cetak Dokumen Saat Ini
+                        <i class="fa-solid fa-print"></i> Cetak Dokumen
                     </button>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" id="btnSimpan">
                         <i class="fa-solid fa-cloud-arrow-up"></i> Simpan ke Cloud
                     </button>
                 </div>
             </form>
-
-            <div class="status-badge"><div class="status-dot" id="supabaseDot"></div><span id="supabaseText">Loading cloud...</span></div>
+            <div class="status-badge"><div class="status-dot" id="supabaseDot"></div><span id="supabaseText">Menghubungkan ke Cloud...</span></div>
         </main>
 
         <section class="main-panel rekap-panel">
@@ -224,7 +209,7 @@
                 <h2><i class="fa-solid fa-database"></i> Rekap Notulen Cloud</h2>
                 <button type="button" class="btn btn-print btn-sm" onclick="loadNotulensi()"><i class="fa-solid fa-rotate"></i> Sinkron Ulang</button>
             </div>
-            <div id="rekapContainer" class="rekap-grid"><div class="loading-text">Memuat...</div></div>
+            <div id="rekapContainer" class="rekap-grid"><div class="loading-text" style="width: 100%; text-align: center;">Memuat data...</div></div>
         </section>
     </div>
 
@@ -241,7 +226,7 @@
         <div class="print-title">NOTULEN HASIL RAPAT</div>
 
         <table class="print-meta-table">
-            <tr><td class="label">Kegiatan</td><td class="colon">:</td><td id="p-judul">-</td></tr>
+            <tr><td class="label">Agenda / Kegiatan</td><td class="colon">:</td><td id="p-judul">-</td></tr>
             <tr><td class="label">Hari / Tanggal</td><td class="colon">:</td><td id="p-tanggal">-</td></tr>
             <tr><td class="label">Waktu</td><td class="colon">:</td><td id="p-waktu">-</td></tr>
             <tr><td class="label">Tempat</td><td class="colon">:</td><td id="p-tempat">-</td></tr>
@@ -270,59 +255,196 @@
                 <strong><i class="fa-solid fa-users"></i> Lampiran Daftar Hadir</strong>
                 <div id="printAbsenImage"></div>
             </div>
-
+            
             <div class="print-gallery" id="printPhotosGallery"></div>
         </div>
     </div>
 
     <script>
+        // Kunci API Database Supabase (Langsung Pakai)
         const SUPABASE_URL = "https://wylkasidfbfhowozcuce.supabase.co"; 
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5bGthc2lkZmJmaG93b3pjdWNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTc2ODAsImV4cCI6MjA5NTE3MzY4MH0.JGkdTtl3Nh1LcDeR_dzC1lMiA_IslkQQ3QJFtu3u07A";
         
         let supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         document.getElementById('supabaseDot').classList.add('connected');
-        document.getElementById('supabaseText').innerText = "Supabase Cloud Terkoneksi secara Real-Time!";
+        document.getElementById('supabaseText').innerText = "Supabase Cloud Terkoneksi (Siap Upload File!)";
         
+        // Penyimpan memori file sementara
         let localDataNotulensi = [];
         let uploadedPhotos = [];
         let dataUndanganFile = null;
         let dataAbsenFile = null;
 
+        // Tarik data saat pertama kali buka web
         loadNotulensi();
 
+        // --- FUNGSI 1: TAMPILKAN REKAP CLOUD ---
         async function loadNotulensi() {
             const container = document.getElementById('rekapContainer');
-            container.innerHTML = '<div class="loading-text">Memuat rekap data...</div>';
+            if(!container) return; // Anti-Error Check
+            container.innerHTML = '<div class="loading-text" style="width:100%; text-align:center;">Memuat data...</div>';
+            
             try {
                 const { data, error } = await supabaseClient.from('notulensi').select('*').order('created_at', { ascending: false });
                 if (error) throw error;
                 localDataNotulensi = data;
-                if (!data || data.length === 0) { container.innerHTML = '<div class="loading-text">Belum ada rekaman notulensi di cloud.</div>'; return; }
+                
+                if (!data || data.length === 0) { 
+                    container.innerHTML = '<div class="loading-text" style="width:100%; text-align:center;">Belum ada rekaman notulensi di cloud.</div>'; 
+                    return; 
+                }
+                
                 container.innerHTML = "";
                 data.forEach(item => {
+                    // Cek jika data tersebut memiliki file lampiran
+                    let fileBadge = "";
+                    let viewFilesBtn = "";
+                    if(item.file_undangan || item.file_absen || item.file_foto) {
+                        fileBadge = `<span style="color:var(--accent-cyan); font-size:11px; margin-left:8px;"><i class="fa-solid fa-paperclip"></i> Berlampiran</span>`;
+                        // Kita berikan link ke Undangan sebagai tombol lihat berkas (contoh)
+                        let targetLink = item.file_undangan || item.file_absen || (item.file_foto ? item.file_foto.split(',')[0] : '#');
+                        viewFilesBtn = `<a href="${targetLink}" target="_blank" class="btn btn-sm btn-view-file"><i class="fa-solid fa-link" style="margin-right:5px;"></i> Cek File</a>`;
+                    }
+
                     const card = document.createElement('div'); card.className = 'rekap-card';
                     card.innerHTML = `
                         <div>
-                            <div class="rekap-title">${item.judul}</div>
-                            <div class="rekap-meta"><div class="meta-item"><i class="fa-solid fa-calendar-days"></i> ${item.tanggal}</div></div>
-                            <div class="rekap-body">${item.isi_notulen}</div>
+                            <div class="rekap-title">${item.judul || '-'} ${fileBadge}</div>
+                            <div class="rekap-meta">
+                                <div><i class="fa-solid fa-calendar-days"></i> ${item.tanggal || '-'}</div>
+                                <div><i class="fa-solid fa-user-tie"></i> Pemimpin: ${item.pemimpin_rapat || '-'}</div>
+                            </div>
+                            <div class="rekap-body">${item.isi_notulen || '-'}</div>
                         </div>
                         <div class="rekap-actions">
+                            ${viewFilesBtn}
                             <button class="btn btn-sm btn-delete" onclick="deleteNotulen(${item.id})">Hapus</button>
                             <button class="btn btn-sm btn-load-print" onclick="triggerPrintFromData(${item.id})">Cetak Arsip</button>
                         </div>
                     `;
                     container.appendChild(card);
                 });
-            } catch (err) {}
+            } catch (err) { console.error(err); }
         }
 
+        // --- FUNGSI 2: HAPUS REKAP DARI CLOUD ---
         async function deleteNotulen(id) {
             if (!confirm("Hapus permanen data ini?")) return;
             await supabaseClient.from('notulensi').delete().eq('id', id);
             loadNotulensi();
         }
 
+        // --- FUNGSI 3: UPLOAD KE LAYAR SEMENTARA (UNDANGAN & ABSEN) ---
+        function handleSingleFile(input, previewId) {
+            const container = document.getElementById(previewId); 
+            if (!container) return; // Anti Error Check
+            container.innerHTML = ""; 
+
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const isImage = file.type.startsWith('image/');
+
+                if(previewId === 'previewUndangan') {
+                    dataUndanganFile = file;
+                    const metaDiv = document.getElementById('printUndanganMeta');
+                    if(metaDiv) {
+                        metaDiv.style.display = 'block';
+                        if(isImage) {
+                            const reader = new FileReader();
+                            reader.onload = e => document.getElementById('printUndanganImage').innerHTML = `<img src="${e.target.result}">`;
+                            reader.readAsDataURL(file);
+                        } else {
+                            document.getElementById('printUndanganImage').innerHTML = `<p style="font-style:italic;">[Dokumen berformat PDF telah dilampirkan]</p>`;
+                        }
+                    }
+                }
+
+                if(previewId === 'previewAbsen') {
+                    dataAbsenFile = file;
+                    const metaDiv = document.getElementById('printAbsenMeta');
+                    if(metaDiv) {
+                        metaDiv.style.display = 'block';
+                        if(isImage) {
+                            const reader = new FileReader();
+                            reader.onload = e => document.getElementById('printAbsenImage').innerHTML = `<img src="${e.target.result}">`;
+                            reader.readAsDataURL(file);
+                        } else {
+                            document.getElementById('printAbsenImage').innerHTML = `<p style="font-style:italic;">[Dokumen berformat PDF telah dilampirkan]</p>`;
+                        }
+                    }
+                }
+
+                container.innerHTML = `<div class="file-item"><span><i class="fa-solid fa-file-circle-check"></i> ${file.name}</span><i class="fa-solid fa-trash-can" onclick="removeSingleFile('${previewId}')"></i></div>`;
+                checkAttachmentsVisibility();
+            }
+        }
+
+        // --- FUNGSI 4: HAPUS FILE DARI LAYAR SEMENTARA ---
+        function removeSingleFile(previewId) {
+            const container = document.getElementById(previewId);
+            if (container) container.innerHTML = ""; // Anti Error Check
+
+            if(previewId === 'previewUndangan') {
+                document.getElementById('fileUndangan').value = ""; dataUndanganFile = null;
+                const metaDiv = document.getElementById('printUndanganMeta');
+                if(metaDiv) metaDiv.style.display = 'none'; 
+                const imgDiv = document.getElementById('printUndanganImage');
+                if(imgDiv) imgDiv.innerHTML = "";
+            }
+            if(previewId === 'previewAbsen') {
+                document.getElementById('fileAbsen').value = ""; dataAbsenFile = null;
+                const metaDiv = document.getElementById('printAbsenMeta');
+                if(metaDiv) metaDiv.style.display = 'none'; 
+                const imgDiv = document.getElementById('printAbsenImage');
+                if(imgDiv) imgDiv.innerHTML = "";
+            }
+            checkAttachmentsVisibility();
+        }
+
+        // --- FUNGSI 5: UPLOAD BANYAK FOTO KE LAYAR SEMENTARA ---
+        function handleMultipleImages(input) {
+            if (input.files) {
+                Array.from(input.files).forEach(file => {
+                    if (!file.type.startsWith('image/')) return;
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        uploadedPhotos.push(file);
+                        const galUi = document.getElementById('previewFotoGallery');
+                        const galPrint = document.getElementById('printPhotosGallery');
+                        if(galUi) galUi.innerHTML += `<div class="gallery-img-wrapper"><img src="${e.target.result}"></div>`;
+                        if(galPrint) galPrint.innerHTML += `<div class="print-gallery-item"><img src="${e.target.result}"><p>Kegiatan: ${file.name}</p></div>`;
+                        checkAttachmentsVisibility();
+                    }
+                    reader.readAsDataURL(file);
+                });
+            }
+        }
+
+        // --- FUNGSI 6: MENGONTROL HALAMAN LAMPIRAN SAAT CETAK ---
+        function checkAttachmentsVisibility() {
+            const zone = document.getElementById('printAttachmentsZone');
+            if (!zone) return; // Anti Error Check
+            if (uploadedPhotos.length > 0 || dataUndanganFile || dataAbsenFile) {
+                zone.setAttribute("style", "display: block !important;");
+            } else {
+                zone.setAttribute("style", "display: none !important;");
+            }
+        }
+
+        // --- FUNGSI 7: MENCETAK DATA SAAT INI (KERTAS FISIK) ---
+        function triggerPrint() {
+            checkAttachmentsVisibility(); 
+            document.getElementById('p-judul').innerText = document.getElementById('judul').value || '-';
+            document.getElementById('p-tanggal').innerText = document.getElementById('tanggal').value || '-';
+            document.getElementById('p-waktu').innerText = document.getElementById('waktu').value || '-';
+            document.getElementById('p-tempat').innerText = document.getElementById('tempat').value || '-';
+            document.getElementById('p-pemimpin').innerText = document.getElementById('pemimpin').value || '-';
+            document.getElementById('p-isi').innerText = document.getElementById('isiNotulen').value || '-';
+            document.getElementById('p-current-date').innerText = new Date().toLocaleDateString('id-ID');
+            window.print();
+        }
+
+        // --- FUNGSI 8: MENCETAK DATA LAMA DARI REKAP CLOUD ---
         function triggerPrintFromData(id) {
             const item = localDataNotulensi.find(x => x.id === id);
             if (!item) return;
@@ -334,143 +456,111 @@
             document.getElementById('p-isi').innerText = item.isi_notulen || '-';
             document.getElementById('p-current-date').innerText = new Date().toLocaleDateString('id-ID');
             
-            // Sembunyikan lampiran untuk data lama dari cloud (karena hanya teks yang disimpan saat ini)
-            document.getElementById('printAttachmentsZone').setAttribute("style", "display: none !important;");
+            // Sembunyikan halaman lampiran untuk arsip cetak lama
+            const zone = document.getElementById('printAttachmentsZone');
+            if(zone) zone.setAttribute("style", "display: none !important;");
             window.print();
         }
 
-        // --- SISTEM RENDER GAMBAR KE HALAMAN CETAK ---
-        function handleSingleFile(input, previewId) {
-            const container = document.getElementById(previewId);
-            container.innerHTML = ""; 
-
-            if (input.files && input.files[0]) {
-                const file = input.files[0];
-                const isImage = file.type.startsWith('image/');
-
-                if(previewId === 'previewUndangan') {
-                    dataUndanganFile = file;
-                    const metaDiv = document.getElementById('printUndanganMeta');
-                    if(isImage) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            metaDiv.innerHTML = `<strong><i class="fa-solid fa-envelope-open-text"></i> Lampiran Surat Undangan:</strong><br><img src="${e.target.result}" style="max-width:100%; margin-top:10px; border:2px solid #000;">`;
-                            metaDiv.style.display = 'block';
-                        }
-                        reader.readAsDataURL(file);
-                    } else {
-                        metaDiv.innerHTML = `<strong><i class="fa-solid fa-file-pdf"></i> Lampiran Surat Undangan:</strong> Berkas dokumen (${file.name}) telah diunggah ke cloud.`;
-                        metaDiv.style.display = 'block';
-                    }
-                }
-
-                if(previewId === 'previewAbsen') {
-                    dataAbsenFile = file;
-                    const metaDiv = document.getElementById('printAbsenMeta');
-                    if(isImage) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            metaDiv.innerHTML = `<strong><i class="fa-solid fa-clipboard-user"></i> Lampiran Daftar Hadir:</strong><br><img src="${e.target.result}" style="max-width:100%; margin-top:10px; border:2px solid #000;">`;
-                            metaDiv.style.display = 'block';
-                        }
-                        reader.readAsDataURL(file);
-                    } else {
-                        metaDiv.innerHTML = `<strong><i class="fa-solid fa-file-pdf"></i> Lampiran Daftar Hadir:</strong> Berkas dokumen (${file.name}) telah diunggah ke cloud.`;
-                        metaDiv.style.display = 'block';
-                    }
-                }
-
-                const item = document.createElement('div');
-                item.className = 'file-item';
-                item.innerHTML = `
-                    <span><i class="fa-solid fa-file-circle-check" style="color:#00f2fe"></i> ${file.name}</span>
-                    <i class="fa-solid fa-trash-can" onclick="removeSingleFile('${previewId}')"></i>
-                `;
-                container.appendChild(item);
-                
-                checkAttachmentsVisibility();
-            }
-        }
-
-        function checkAttachmentsVisibility() {
-            const zone = document.getElementById('printAttachmentsZone');
-            if (uploadedPhotos.length > 0 || dataUndanganFile || dataAbsenFile) {
-                // Pastikan halaman lampiran dipaksa muncul saat mode print
-                zone.setAttribute("style", "display: block !important;");
-            } else {
-                zone.setAttribute("style", "display: none !important;");
-            }
-        }
-
-        function removeSingleFile(previewId) {
-            document.getElementById(previewId).innerHTML = "";
-            if(previewId === 'previewUndangan') {
-                document.getElementById('fileUndangan').value = ""; dataUndanganFile = null;
-                document.getElementById('printUndanganMeta').style.display = 'none'; document.getElementById('printUndanganImage').innerHTML = "";
-            }
-            if(previewId === 'previewAbsen') {
-                document.getElementById('fileAbsen').value = ""; dataAbsenFile = null;
-                document.getElementById('printAbsenMeta').style.display = 'none'; document.getElementById('printAbsenImage').innerHTML = "";
-            }
-            checkAttachmentsVisibility();
-        }
-
-        function handleMultipleImages(input) {
-            if (input.files) {
-                Array.from(input.files).forEach(file => {
-                    if (!file.type.startsWith('image/')) return;
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        uploadedPhotos.push(file);
-                        document.getElementById('previewFotoGallery').innerHTML += `<div class="gallery-img-wrapper"><img src="${e.target.result}"></div>`;
-                        document.getElementById('printPhotosGallery').innerHTML += `<div class="print-gallery-item"><img src="${e.target.result}"><p>Kegiatan: ${file.name}</p></div>`;
-                        checkAttachmentsVisibility();
-                    }
-                    reader.readAsDataURL(file);
-                });
-            }
-        }
-
-        function checkAttachmentsVisibility() {
-            const zone = document.getElementById('printAttachmentsZone');
-            if (uploadedPhotos.length > 0 || dataUndanganFile || dataAbsenFile) {
-                zone.setAttribute("style", "display: block !important;");
-            } else {
-                zone.setAttribute("style", "display: none !important;");
-            }
-        }
-
-        function triggerPrint() {
-            // Memastikan area gambar lampiran terbuka paksa sebelum browser memanggil Print
-            checkAttachmentsVisibility(); 
-
-            document.getElementById('p-judul').innerText = document.getElementById('judul').value || '-';
-            document.getElementById('p-tanggal').innerText = document.getElementById('tanggal').value || '-';
-            document.getElementById('p-waktu').innerText = document.getElementById('waktu').value || '-';
-            document.getElementById('p-tempat').innerText = document.getElementById('tempat').value || '-';
-            document.getElementById('p-pemimpin').innerText = document.getElementById('pemimpin').value || '-';
-            document.getElementById('p-isi').innerText = document.getElementById('isiNotulen').value || '-';
-            document.getElementById('p-current-date').innerText = new Date().toLocaleDateString('id-ID');
-            window.print();
-        }
-
+        // --- FUNGSI 9: MESIN SIMPAN KE DATABASE & STORAGE CLOUD (ANTI-ERROR) ---
         async function saveNotulen(event) {
             event.preventDefault();
-            const payload = {
-                judul: document.getElementById('judul').value, tanggal: document.getElementById('tanggal').value,
-                waktu: document.getElementById('waktu').value, tempat: document.getElementById('tempat').value,
-                pemimpin_rapat: document.getElementById('pemimpin').value, isi_notulen: document.getElementById('isiNotulen').value,
-                created_at: new Date()
-            };
+            
+            const btnSimpan = document.getElementById('btnSimpan');
+            const statusDot = document.getElementById('supabaseDot');
+            const statusText = document.getElementById('supabaseText');
+            
+            // Animasi Loading
+            btnSimpan.disabled = true;
+            btnSimpan.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengunggah...';
+            statusDot.classList.replace('connected', 'uploading');
+            statusText.innerText = "Sedang mengirim file dan data ke server Supabase...";
+
             try {
-                await supabaseClient.from('notulensi').insert([payload]);
-                alert("Berhasil disimpan ke Cloud!");
+                let urlUndangan = "";
+                let urlAbsen = "";
+                let urlFotos = [];
+
+                // Proses Upload File Undangan (ke Bucket Storage)
+                if (dataUndanganFile) {
+                    const ext = dataUndanganFile.name.split('.').pop();
+                    const fileName = `undangan_${Date.now()}.${ext}`;
+                    const { data, error } = await supabaseClient.storage.from('berkas_notulen').upload(fileName, dataUndanganFile);
+                    if (!error && data) {
+                        urlUndangan = supabaseClient.storage.from('berkas_notulen').getPublicUrl(fileName).data.publicUrl;
+                    }
+                }
+
+                // Proses Upload File Absen
+                if (dataAbsenFile) {
+                    const ext = dataAbsenFile.name.split('.').pop();
+                    const fileName = `absen_${Date.now()}.${ext}`;
+                    const { data, error } = await supabaseClient.storage.from('berkas_notulen').upload(fileName, dataAbsenFile);
+                    if (!error && data) {
+                        urlAbsen = supabaseClient.storage.from('berkas_notulen').getPublicUrl(fileName).data.publicUrl;
+                    }
+                }
+
+                // Proses Upload Semua Foto Kegiatan
+                if (uploadedPhotos.length > 0) {
+                    for (let i = 0; i < uploadedPhotos.length; i++) {
+                        const file = uploadedPhotos[i];
+                        const ext = file.name.split('.').pop();
+                        const fileName = `foto_${Date.now()}_${i}.${ext}`;
+                        const { data, error } = await supabaseClient.storage.from('berkas_notulen').upload(fileName, file);
+                        if (!error && data) {
+                            const pUrl = supabaseClient.storage.from('berkas_notulen').getPublicUrl(fileName).data.publicUrl;
+                            urlFotos.push(pUrl);
+                        }
+                    }
+                }
+
+                // Payload: Gabungkan Teks Form + URL Link dari Storage File
+                const payload = {
+                    judul: document.getElementById('judul').value, 
+                    tanggal: document.getElementById('tanggal').value,
+                    waktu: document.getElementById('waktu').value, 
+                    tempat: document.getElementById('tempat').value,
+                    pemimpin_rapat: document.getElementById('pemimpin').value, 
+                    isi_notulen: document.getElementById('isiNotulen').value,
+                    file_undangan: urlUndangan,
+                    file_absen: urlAbsen,
+                    file_foto: urlFotos.join(','), // Kumpulan URL Foto
+                    created_at: new Date()
+                };
+
+                // Tembakkan Teks + Link ke tabel Database (Table: notulensi)
+                const { error: dbError } = await supabaseClient.from('notulensi').insert([payload]);
+                if (dbError) throw dbError;
+
+                alert("Selamat! Semua Data & Lampiran Berkas berhasil disimpan ke Cloud Supabase!");
+                
+                // RESET HALAMAN (Anti Error Null innerHTML check)
                 document.getElementById('notulenForm').reset();
-                document.getElementById('previewFotoGallery').innerHTML = "";
-                document.getElementById('printPhotosGallery').innerHTML = "";
-                removeSingleFile('previewUndangan'); removeSingleFile('previewAbsen');
-                uploadedPhotos = []; checkAttachmentsVisibility(); loadNotulensi();
-            } catch (err) { alert("Error: " + err.message); }
+                
+                const galUi = document.getElementById('previewFotoGallery');
+                const galPrint = document.getElementById('printPhotosGallery');
+                if (galUi) galUi.innerHTML = "";
+                if (galPrint) galPrint.innerHTML = "";
+                
+                removeSingleFile('previewUndangan'); 
+                removeSingleFile('previewAbsen');
+                
+                uploadedPhotos = []; 
+                checkAttachmentsVisibility(); 
+                
+                // Panggil ulang rekap (Auto-refresh)
+                loadNotulensi();
+
+            } catch (err) { 
+                alert("Gagal mengunggah! Pastikan kamu sudah membuat Bucket Storage bernama 'berkas_notulen' dengan policy Public. Detail: " + err.message); 
+            } finally {
+                // Kembalikan tombol seperti semula
+                btnSimpan.disabled = false;
+                btnSimpan.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Simpan ke Cloud';
+                statusDot.classList.replace('uploading', 'connected');
+                statusText.innerText = "Supabase Cloud Terkoneksi (Siap Upload File!)";
+            }
         }
     </script>
 </body>
