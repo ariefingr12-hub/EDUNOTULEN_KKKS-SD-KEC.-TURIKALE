@@ -341,37 +341,64 @@
 
         // --- SISTEM RENDER GAMBAR KE HALAMAN CETAK ---
         function handleSingleFile(input, previewId) {
-            const container = document.getElementById(previewId); container.innerHTML = ""; 
+            const container = document.getElementById(previewId);
+            container.innerHTML = ""; 
+
             if (input.files && input.files[0]) {
                 const file = input.files[0];
                 const isImage = file.type.startsWith('image/');
 
                 if(previewId === 'previewUndangan') {
                     dataUndanganFile = file;
-                    document.getElementById('printUndanganMeta').style.display = 'block';
-                    if(isImage){
+                    const metaDiv = document.getElementById('printUndanganMeta');
+                    if(isImage) {
                         const reader = new FileReader();
-                        reader.onload = e => document.getElementById('printUndanganImage').innerHTML = `<img src="${e.target.result}">`;
+                        reader.onload = function(e) {
+                            metaDiv.innerHTML = `<strong><i class="fa-solid fa-envelope-open-text"></i> Lampiran Surat Undangan:</strong><br><img src="${e.target.result}" style="max-width:100%; margin-top:10px; border:2px solid #000;">`;
+                            metaDiv.style.display = 'block';
+                        }
                         reader.readAsDataURL(file);
                     } else {
-                        document.getElementById('printUndanganImage').innerHTML = `<p style="margin-top:10px; font-style:italic;">[Dokumen Undangan berformat PDF]</p>`;
+                        metaDiv.innerHTML = `<strong><i class="fa-solid fa-file-pdf"></i> Lampiran Surat Undangan:</strong> Berkas dokumen (${file.name}) telah diunggah ke cloud.`;
+                        metaDiv.style.display = 'block';
                     }
                 }
 
                 if(previewId === 'previewAbsen') {
                     dataAbsenFile = file;
-                    document.getElementById('printAbsenMeta').style.display = 'block';
-                    if(isImage){
+                    const metaDiv = document.getElementById('printAbsenMeta');
+                    if(isImage) {
                         const reader = new FileReader();
-                        reader.onload = e => document.getElementById('printAbsenImage').innerHTML = `<img src="${e.target.result}">`;
+                        reader.onload = function(e) {
+                            metaDiv.innerHTML = `<strong><i class="fa-solid fa-clipboard-user"></i> Lampiran Daftar Hadir:</strong><br><img src="${e.target.result}" style="max-width:100%; margin-top:10px; border:2px solid #000;">`;
+                            metaDiv.style.display = 'block';
+                        }
                         reader.readAsDataURL(file);
                     } else {
-                        document.getElementById('printAbsenImage').innerHTML = `<p style="margin-top:10px; font-style:italic;">[Dokumen Daftar Hadir berformat PDF]</p>`;
+                        metaDiv.innerHTML = `<strong><i class="fa-solid fa-file-pdf"></i> Lampiran Daftar Hadir:</strong> Berkas dokumen (${file.name}) telah diunggah ke cloud.`;
+                        metaDiv.style.display = 'block';
                     }
                 }
 
-                container.innerHTML = `<div class="file-item"><span><i class="fa-solid fa-file-circle-check"></i> ${file.name}</span><i class="fa-solid fa-trash-can" onclick="removeSingleFile('${previewId}')"></i></div>`;
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                item.innerHTML = `
+                    <span><i class="fa-solid fa-file-circle-check" style="color:#00f2fe"></i> ${file.name}</span>
+                    <i class="fa-solid fa-trash-can" onclick="removeSingleFile('${previewId}')"></i>
+                `;
+                container.appendChild(item);
+                
                 checkAttachmentsVisibility();
+            }
+        }
+
+        function checkAttachmentsVisibility() {
+            const zone = document.getElementById('printAttachmentsZone');
+            if (uploadedPhotos.length > 0 || dataUndanganFile || dataAbsenFile) {
+                // Pastikan halaman lampiran dipaksa muncul saat mode print
+                zone.setAttribute("style", "display: block !important;");
+            } else {
+                zone.setAttribute("style", "display: none !important;");
             }
         }
 
