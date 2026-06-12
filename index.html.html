@@ -99,19 +99,24 @@
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
         /* ========================================================
-           2. FORMAT KERTAS CETAK (PRINT)
+           2. FORMAT KERTAS CETAK (PRINT) DENGAN KOP RESMI
            ======================================================== */
         #printable-document { display: none; }
         @media print {
             body, .app-container, .main-panel, body::before, body::after, .rekap-panel { background: #ffffff !important; color: #000000 !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
             header, .main-panel, .action-container, .status-badge, .rekap-panel { display: none !important; }
             #printable-document { display: block !important; padding: 40px; font-family: 'Times New Roman', Times, serif; color: #000; line-height: 1.6; }
-            .print-kop { display: flex; align-items: center; border-bottom: 3px double #000; padding-bottom: 15px; margin-bottom: 30px; }
+            
+            /* Gaya Kop Surat Baru */
+            .print-kop { display: flex; align-items: center; margin-bottom: 5px; }
             .print-logo { width: 90px; height: auto; margin-right: 20px; object-fit: contain; }
             .print-kop-text { flex: 1; text-align: center; text-transform: uppercase; padding-right: 90px; }
-            .print-kop-text h2 { font-size: 16pt; font-weight: bold; margin-bottom: 5px; }
-            .print-kop-text h3 { font-size: 14pt; font-weight: bold; margin-bottom: 5px; }
-            .print-kop-text p { font-size: 11pt; text-transform: none; font-style: italic; margin: 0; }
+            .print-kop-text h2 { font-size: 16pt; font-weight: bold; margin-bottom: 2px; }
+            .print-kop-text h3 { font-size: 14pt; font-weight: bold; margin-bottom: 2px; }
+            .print-kop-text p { font-size: 10pt; text-transform: none; margin: 0; }
+            .garis-kop-tebal { border: 0; border-top: 3px solid black; margin-bottom: 2px; }
+            .garis-kop-tipis { border: 0; border-top: 1px solid black; margin-bottom: 20px; }
+
             .print-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin-bottom: 25px; }
             .print-meta-table { width: 100%; margin-bottom: 25px; border-collapse: collapse; }
             .print-meta-table td { padding: 4px 8px; vertical-align: top; font-size: 11pt; }
@@ -120,10 +125,13 @@
             .print-isi { font-size: 11pt; text-align: justify; white-space: pre-wrap; margin-bottom: 30px; }
             .print-signatures { margin-top: 50px; width: 100%; page-break-inside: avoid; }
             .print-signatures td { width: 50%; text-align: center; font-size: 11pt; }
+            
+            /* Gaya Lampiran Print */
             .print-attachments-page { page-break-before: always; padding-top: 20px; }
             .print-attachments-title { font-size: 13pt; font-weight: bold; text-align: center; margin-bottom: 25px; text-transform: uppercase; border-bottom: 2px solid #000; padding-bottom: 5px; }
             .attachment-meta-info { font-size: 11pt; margin-bottom: 20px; padding: 15px; border: 1px dashed #666; page-break-inside: avoid; background: #fafafa; }
             .attachment-meta-info img { display: block; max-width: 100%; max-height: 500px; margin-top: 15px; object-fit: contain; border: 1px solid #ddd; }
+            .attachment-meta-info a { color: blue; text-decoration: underline; }
             .print-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
             .print-gallery-item { border: 1px solid #ccc; padding: 10px; text-align: center; page-break-inside: avoid; }
             .print-gallery-item img { width: 100%; max-height: 300px; object-fit: contain; background: #fff; }
@@ -134,7 +142,9 @@
 <body>
 
     <div class="app-container">
+        <!-- HEADER UI UTAMA -->
         <header>
+            <!-- Pastikan nama file logo benar (misal: logo.png) -->
             <img src="logo.png" alt="Logo KKKS-SD" class="header-logo" onerror="this.style.display='none'">
             <h1>Sistem Informasi E-Notulen</h1>
             <p>KKKS-SD Kecamatan Turikale, Kabupaten Maros, Provinsi Sulawesi Selatan</p>
@@ -200,15 +210,22 @@
         </section>
     </div>
 
+    <!-- AREA KHUSUS CETAK (PRINT) -->
     <div id="printable-document">
+        
+        <!-- KOP SURAT RESMI -->
         <div class="print-kop">
-            <img src="logo.png" alt="Logo" class="print-logo" onerror="this.style.display='none'">
+            <!-- Ganti URL atau nama file logo di bawah ini dengan logo instansi kamu -->
+            <img src="logo.png" alt="Logo" class="print-logo" onerror="this.src='https://via.placeholder.com/100?text=LOGO'">
             <div class="print-kop-text">
-                <h2>Kelompok Kerja Kepala Sekolah (KKKS-SD)</h2>
-                <h3>Kecamatan Turikale Kabupaten Maros</h3>
-                <p>Provinsi Sulawesi Selatan</p>
+                <h2>PEMERINTAH KABUPATEN MAROS</h2>
+                <h2>DINAS PENDIDIKAN</h2>
+                <h3>KKKS SD KECAMATAN TURIKALE</h3>
+                <p>Alamat: Jl. Contoh Alamat No. 123, Kec. Turikale, Kab. Maros, Kode Pos 90511</p>
             </div>
         </div>
+        <hr class="garis-kop-tebal">
+        <hr class="garis-kop-tipis">
 
         <div class="print-title">NOTULEN HASIL RAPAT</div>
 
@@ -230,6 +247,7 @@
             </tr>
         </table>
 
+        <!-- LAMPIRAN (Akan muncul di halaman baru saat print jika ada file) -->
         <div class="print-attachments-page" id="printAttachmentsZone" style="display: none;">
             <div class="print-attachments-title">LAMPIRAN DOKUMENTASI</div>
             
@@ -248,6 +266,7 @@
     </div>
 
     <script>
+        // KONFIGURASI SUPABASE (Tetap sama seperti milikmu)
         const SUPABASE_URL = "https://wylkasidfbfhowozcuce.supabase.co"; 
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5bGthc2lkZmJmaG93b3pjdWNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTc2ODAsImV4cCI6MjA5NTE3MzY4MH0.JGkdTtl3Nh1LcDeR_dzC1lMiA_IslkQQ3QJFtu3u07A";
         
@@ -341,7 +360,7 @@
                         reader.onload = e => document.getElementById('printUndanganImage').innerHTML = `<img src="${e.target.result}">`;
                         reader.readAsDataURL(file);
                     } else {
-                        document.getElementById('printUndanganImage').innerHTML = `<p style="font-style:italic;">[Dokumen berformat PDF telah dilampirkan]</p>`;
+                        document.getElementById('printUndanganImage').innerHTML = `<p style="font-style:italic; margin-top:10px;">[Dokumen berformat PDF telah dilampirkan. Hanya tercetak jika diakses via Cloud Archive.]</p>`;
                     }
                 }
 
@@ -353,7 +372,7 @@
                         reader.onload = e => document.getElementById('printAbsenImage').innerHTML = `<img src="${e.target.result}">`;
                         reader.readAsDataURL(file);
                     } else {
-                        document.getElementById('printAbsenImage').innerHTML = `<p style="font-style:italic;">[Dokumen berformat PDF telah dilampirkan]</p>`;
+                        document.getElementById('printAbsenImage').innerHTML = `<p style="font-style:italic; margin-top:10px;">[Dokumen berformat PDF telah dilampirkan. Hanya tercetak jika diakses via Cloud Archive.]</p>`;
                     }
                 }
 
@@ -407,7 +426,7 @@
             }
         }
 
-        // 3. FUNGSI CETAK
+        // 3. FUNGSI CETAK UNTUK FORM YANG SEDANG DIISI
         function triggerPrint() {
             checkAttachmentsVisibility(); 
             document.getElementById('p-judul').innerText = document.getElementById('judul').value || '-';
@@ -420,22 +439,78 @@
             window.print();
         }
 
+        // 4. FUNGSI CETAK DARI DATABASE CLOUD (DIPERBARUI)
         function triggerPrintFromData(id) {
             const item = localDataNotulensi.find(x => x.id === id);
             if (!item) return;
+
+            // Masukkan data ke teks
             document.getElementById('p-judul').innerText = item.judul || '-';
             document.getElementById('p-tanggal').innerText = item.tanggal || '-';
             document.getElementById('p-waktu').innerText = item.waktu || '-';
             document.getElementById('p-tempat').innerText = item.tempat || '-';
             document.getElementById('p-pemimpin').innerText = item.pemimpin_rapat || '-';
             document.getElementById('p-isi').innerText = item.isi_notulen || '-';
-            document.getElementById('p-current-date').innerText = new Date().toLocaleDateString('id-ID');
             
-            document.getElementById('printAttachmentsZone').setAttribute("style", "display: none !important;");
-            window.print();
+            // Format Tanggal
+            const dateObj = new Date(item.created_at);
+            document.getElementById('p-current-date').innerText = isNaN(dateObj) ? new Date().toLocaleDateString('id-ID') : dateObj.toLocaleDateString('id-ID');
+            
+            // Siapkan Area Lampiran
+            document.getElementById('printUndanganMeta').style.display = 'none';
+            document.getElementById('printAbsenMeta').style.display = 'none';
+            document.getElementById('printPhotosGallery').innerHTML = '';
+            
+            let hasAttachments = false;
+
+            // Proses File Undangan
+            if (item.file_undangan) {
+                document.getElementById('printUndanganMeta').style.display = 'block';
+                if(item.file_undangan.match(/\.(jpeg|jpg|gif|png)$/i)) {
+                    document.getElementById('printUndanganImage').innerHTML = `<img src="${item.file_undangan}">`;
+                } else {
+                    document.getElementById('printUndanganImage').innerHTML = `<p style="margin-top:10px;">Terdapat dokumen PDF. <strong><a href="${item.file_undangan}" target="_blank">Lihat/Download Undangan (PDF)</a></strong></p>`;
+                }
+                hasAttachments = true;
+            }
+
+            // Proses File Absen
+            if (item.file_absen) {
+                document.getElementById('printAbsenMeta').style.display = 'block';
+                if(item.file_absen.match(/\.(jpeg|jpg|gif|png)$/i)) {
+                    document.getElementById('printAbsenImage').innerHTML = `<img src="${item.file_absen}">`;
+                } else {
+                    document.getElementById('printAbsenImage').innerHTML = `<p style="margin-top:10px;">Terdapat dokumen PDF. <strong><a href="${item.file_absen}" target="_blank">Lihat/Download Daftar Hadir (PDF)</a></strong></p>`;
+                }
+                hasAttachments = true;
+            }
+
+            // Proses Banyak Foto
+            if (item.file_foto) {
+                const fotos = item.file_foto.split(',');
+                let galleryHTML = '';
+                fotos.forEach((url, index) => {
+                    if(url.trim() !== '') {
+                        galleryHTML += `<div class="print-gallery-item"><img src="${url}"><p>Dokumentasi ${index + 1}</p></div>`;
+                        hasAttachments = true;
+                    }
+                });
+                document.getElementById('printPhotosGallery').innerHTML = galleryHTML;
+            }
+
+            // Tampilkan atau Sembunyikan Halaman Lampiran
+            const zone = document.getElementById('printAttachmentsZone');
+            if (hasAttachments) {
+                zone.setAttribute("style", "display: block !important;");
+            } else {
+                zone.setAttribute("style", "display: none !important;");
+            }
+            
+            // Beri waktu sejenak agar gambar dari cloud dimuat sebelum jendela print terbuka
+            setTimeout(() => { window.print(); }, 500);
         }
 
-        // 4. MESIN SIMPAN KE DATABASE & UPLOAD FILE KE STORAGE CLOUD
+        // 5. MESIN SIMPAN KE DATABASE & UPLOAD FILE KE STORAGE CLOUD
         async function saveNotulen(event) {
             event.preventDefault();
 
@@ -503,7 +578,6 @@
                 // Tembakkan ke database Supabase
                 const { error: dbError } = await supabaseClient.from('notulensi').insert([payload]);
                 
-                // JIKA TERJADI ERROR DARI DATABASE (seperti masalah RLS yang ada di gambar)
                 if (dbError) throw new Error("GAGAL_DATABASE: " + dbError.message);
 
                 alert("Selamat! Semua Data & Lampiran Berkas berhasil disimpan ke Cloud Supabase!");
@@ -523,7 +597,6 @@
                 loadNotulensi();
 
             } catch (err) { 
-                // PEMISAHAN PESAN ERROR AGAR LEBIH AKURAT
                 if (err.message.includes("GAGAL_DATABASE")) {
                     alert("Akses ditolak oleh Database!\n\nPenyebab: " + err.message.replace("GAGAL_DATABASE: ", "") + "\n\nSolusi: Buka Supabase, masuk ke Table 'notulensi', dan matikan/disable fitur RLS (Row-Level Security), ATAU buat Policy baru yang mengizinkan INSERT.");
                 } else if (err.message.includes("GAGAL_STORAGE")) {
@@ -532,7 +605,6 @@
                     alert("Terjadi kesalahan tidak terduga: " + err.message);
                 }
             } finally {
-                // Kembalikan tombol seperti semula
                 btnSimpan.disabled = false;
                 btnSimpan.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Simpan ke Cloud';
                 statusDot.classList.replace('uploading', 'connected');
