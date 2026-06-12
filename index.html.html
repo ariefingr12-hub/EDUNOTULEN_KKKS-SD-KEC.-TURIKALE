@@ -23,47 +23,34 @@
 
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-dark); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; position: relative; }
 
-        /* Background Aurora Berjalan */
-        body::before {
-            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 15% 20%, rgba(0, 242, 254, 0.18) 0%, transparent 45%), radial-gradient(circle at 85% 75%, rgba(168, 85, 247, 0.15) 0%, transparent 50%), radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 40%), linear-gradient(145deg, #020617 0%, #0b1528 50%, #030712 100%);
-            z-index: -2; background-size: 200% 200%; animation: cosmicShift 25s ease infinite;
-        }
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 15% 20%, rgba(0, 242, 254, 0.18) 0%, transparent 45%), radial-gradient(circle at 85% 75%, rgba(168, 85, 247, 0.15) 0%, transparent 50%), radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 40%), linear-gradient(145deg, #020617 0%, #0b1528 50%, #030712 100%); z-index: -2; background-size: 200% 200%; animation: cosmicShift 25s ease infinite; }
         @keyframes cosmicShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-
-        /* Grid Background Overlay */
-        body::after {
-            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px; z-index: -1; pointer-events: none;
-        }
+        body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px); background-size: 40px 40px; z-index: -1; pointer-events: none; }
 
         .app-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
 
-        /* Header UI */
         header { background: var(--panel-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--panel-border); border-radius: 20px; padding: 30px; margin-bottom: 30px; text-align: center; position: relative; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); overflow: hidden; display: flex; flex-direction: column; align-items: center; }
         header::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
         .header-logo { width: 80px; height: auto; margin-bottom: 15px; filter: drop-shadow(0 0 12px var(--accent-glow)); transition: transform 0.3s ease; }
         header h1 { font-family: 'Orbitron', sans-serif; font-size: 24px; letter-spacing: 2px; background: linear-gradient(90deg, #fff, var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; text-transform: uppercase; }
         header p { color: var(--text-secondary); font-size: 14px; font-weight: 300; letter-spacing: 1px; }
 
-        /* Panel Form Utama */
         .main-panel { background: var(--panel-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--panel-border); border-radius: 24px; padding: 40px; box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4); }
         .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; margin-bottom: 30px; }
         @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
         .full-width { grid-column: 1 / -1; }
+
         .input-group { display: flex; flex-direction: column; gap: 8px; }
         .input-group label { font-size: 13px; font-weight: 600; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
         input[type="text"], input[type="date"], input[type="time"], textarea { background: rgba(5, 12, 28, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 14px 16px; color: var(--text-primary); font-family: inherit; font-size: 15px; transition: all 0.3s ease; width: 100%; }
         input:focus, textarea:focus { outline: none; border-color: var(--accent-cyan); box-shadow: 0 0 15px var(--accent-glow); background: rgba(5, 12, 28, 0.9); }
         textarea { resize: vertical; min-height: 180px; line-height: 1.6; }
 
-        /* Zona Upload UI */
         .upload-section { margin-top: 35px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 30px; }
         .upload-section h3 { font-family: 'Orbitron', sans-serif; font-size: 16px; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
         .upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
         @media (max-width: 900px) { .upload-grid { grid-template-columns: 1fr; } }
-        
+
         .upload-wrapper { display: flex; flex-direction: column; gap: 10px; }
         .upload-box { background: rgba(255, 255, 255, 0.02); border: 2px dashed rgba(0, 242, 254, 0.25); border-radius: 14px; padding: 25px 15px; text-align: center; cursor: pointer; transition: all 0.3s ease; position: relative; }
         .upload-box:hover { border-color: var(--accent-cyan); background: rgba(0, 242, 254, 0.04); }
@@ -71,25 +58,25 @@
         .upload-box p { font-size: 13px; color: var(--text-secondary); margin-bottom: 5px; }
         .upload-box span { font-size: 11px; color: rgba(255, 255, 255, 0.3); }
         .upload-box input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 5; }
-        
+
         .file-preview-container { display: flex; flex-direction: column; gap: 8px; max-height: 150px; overflow-y: auto; text-align: left; }
         .file-item { background: rgba(5, 12, 28, 0.8); border: 1px solid rgba(0, 242, 254, 0.3); padding: 8px 12px; border-radius: 6px; display: flex; justify-content: space-between; font-size: 12px; align-items: center; position: relative; z-index: 10; }
         .file-item span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 80%; }
         .file-item i { color: #ef4444; cursor: pointer; font-size: 14px; padding: 5px; }
+        .file-item i:hover { color: #f87171; }
         
         .gallery-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; }
         .gallery-img-wrapper { aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); position: relative; }
         .gallery-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Tombol UI */
         .action-container { margin-top: 40px; display: flex; justify-content: flex-end; gap: 15px; }
         .btn { font-family: 'Orbitron', sans-serif; padding: 14px 28px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; border: none; transition: all 0.3s ease; }
         .btn-print { background: transparent; color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
         .btn-print:hover { background: rgba(0, 242, 254, 0.1); }
         .btn-primary { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); color: #050c1c; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(0, 242, 254, 0.6); }
+        .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* Rekap Cloud UI */
         .rekap-panel { margin-top: 40px; }
         .rekap-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(0, 242, 254, 0.2); padding-bottom: 15px; }
         .rekap-header h2 { font-family: 'Orbitron', sans-serif; font-size: 18px; color: var(--accent-cyan); }
@@ -103,7 +90,7 @@
         .btn-sm { padding: 8px 14px; font-size: 12px; border-radius: 8px; }
         .btn-delete { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25); }
         .btn-load-print { background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); border: 1px solid rgba(0, 242, 254, 0.25); }
-        .btn-view-file { background: rgba(16, 185, 129, 0.1); color: var(--accent-success); border: 1px solid rgba(16, 185, 129, 0.25); text-decoration: none; display: inline-flex; align-items: center; justify-content: center;}
+        .btn-view-file { background: rgba(16, 185, 129, 0.1); color: var(--accent-success); border: 1px solid rgba(16, 185, 129, 0.25); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
 
         .status-badge { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; font-size: 12px; color: var(--text-secondary); }
         .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #e11d48; }
@@ -112,7 +99,7 @@
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
         /* ========================================================
-           2. FORMAT KERTAS CETAK (PRINT) - RESMI & FORMAL
+           2. FORMAT KERTAS CETAK (PRINT)
            ======================================================== */
         #printable-document { display: none; }
         @media print {
@@ -133,7 +120,6 @@
             .print-isi { font-size: 11pt; text-align: justify; white-space: pre-wrap; margin-bottom: 30px; }
             .print-signatures { margin-top: 50px; width: 100%; page-break-inside: avoid; }
             .print-signatures td { width: 50%; text-align: center; font-size: 11pt; }
-            
             .print-attachments-page { page-break-before: always; padding-top: 20px; }
             .print-attachments-title { font-size: 13pt; font-weight: bold; text-align: center; margin-bottom: 25px; text-transform: uppercase; border-bottom: 2px solid #000; padding-bottom: 5px; }
             .attachment-meta-info { font-size: 11pt; margin-bottom: 20px; padding: 15px; border: 1px dashed #666; page-break-inside: avoid; background: #fafafa; }
@@ -194,13 +180,14 @@
 
                 <div class="action-container">
                     <button type="button" class="btn btn-print" onclick="triggerPrint()">
-                        <i class="fa-solid fa-print"></i> Cetak Dokumen
+                        <i class="fa-solid fa-print"></i> Cetak Dokumen Saat Ini
                     </button>
                     <button type="submit" class="btn btn-primary" id="btnSimpan">
                         <i class="fa-solid fa-cloud-arrow-up"></i> Simpan ke Cloud
                     </button>
                 </div>
             </form>
+
             <div class="status-badge"><div class="status-dot" id="supabaseDot"></div><span id="supabaseText">Menghubungkan ke Cloud...</span></div>
         </main>
 
@@ -209,7 +196,7 @@
                 <h2><i class="fa-solid fa-database"></i> Rekap Notulen Cloud</h2>
                 <button type="button" class="btn btn-print btn-sm" onclick="loadNotulensi()"><i class="fa-solid fa-rotate"></i> Sinkron Ulang</button>
             </div>
-            <div id="rekapContainer" class="rekap-grid"><div class="loading-text" style="width: 100%; text-align: center;">Memuat data...</div></div>
+            <div id="rekapContainer" class="rekap-grid"><div class="loading-text" style="text-align: center; width: 100%;">Memuat data dari database...</div></div>
         </section>
     </div>
 
@@ -255,53 +242,48 @@
                 <strong><i class="fa-solid fa-users"></i> Lampiran Daftar Hadir</strong>
                 <div id="printAbsenImage"></div>
             </div>
-            
+
             <div class="print-gallery" id="printPhotosGallery"></div>
         </div>
     </div>
 
     <script>
-        // Kunci API Database Supabase (Langsung Pakai)
         const SUPABASE_URL = "https://wylkasidfbfhowozcuce.supabase.co"; 
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5bGthc2lkZmJmaG93b3pjdWNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTc2ODAsImV4cCI6MjA5NTE3MzY4MH0.JGkdTtl3Nh1LcDeR_dzC1lMiA_IslkQQ3QJFtu3u07A";
         
         let supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        document.getElementById('supabaseDot').classList.add('connected');
-        document.getElementById('supabaseText').innerText = "Supabase Cloud Terkoneksi (Siap Upload File!)";
         
-        // Penyimpan memori file sementara
+        document.getElementById('supabaseDot').classList.add('connected');
+        document.getElementById('supabaseText').innerText = "Supabase Cloud Terkoneksi (Aman!)";
+        
         let localDataNotulensi = [];
         let uploadedPhotos = [];
         let dataUndanganFile = null;
         let dataAbsenFile = null;
 
-        // Tarik data saat pertama kali buka web
         loadNotulensi();
 
-        // --- FUNGSI 1: TAMPILKAN REKAP CLOUD ---
+        // 1. FUNGSI MENAMPILKAN REKAP DATA CLOUD
         async function loadNotulensi() {
             const container = document.getElementById('rekapContainer');
-            if(!container) return; // Anti-Error Check
-            container.innerHTML = '<div class="loading-text" style="width:100%; text-align:center;">Memuat data...</div>';
-            
+            if(!container) return;
+            container.innerHTML = '<div class="loading-text" style="text-align:center; width:100%;">Memuat rekap data dari Cloud...</div>';
             try {
                 const { data, error } = await supabaseClient.from('notulensi').select('*').order('created_at', { ascending: false });
                 if (error) throw error;
                 localDataNotulensi = data;
                 
                 if (!data || data.length === 0) { 
-                    container.innerHTML = '<div class="loading-text" style="width:100%; text-align:center;">Belum ada rekaman notulensi di cloud.</div>'; 
+                    container.innerHTML = '<div class="loading-text" style="text-align:center; width:100%;">Belum ada rekaman notulensi di cloud.</div>'; 
                     return; 
                 }
                 
                 container.innerHTML = "";
                 data.forEach(item => {
-                    // Cek jika data tersebut memiliki file lampiran
                     let fileBadge = "";
                     let viewFilesBtn = "";
                     if(item.file_undangan || item.file_absen || item.file_foto) {
-                        fileBadge = `<span style="color:var(--accent-cyan); font-size:11px; margin-left:8px;"><i class="fa-solid fa-paperclip"></i> Berlampiran</span>`;
-                        // Kita berikan link ke Undangan sebagai tombol lihat berkas (contoh)
+                        fileBadge = `<span style="color:var(--accent-cyan); font-size:11px; margin-left:8px;"><i class="fa-solid fa-paperclip"></i> Berkas Terlampir</span>`;
                         let targetLink = item.file_undangan || item.file_absen || (item.file_foto ? item.file_foto.split(',')[0] : '#');
                         viewFilesBtn = `<a href="${targetLink}" target="_blank" class="btn btn-sm btn-view-file"><i class="fa-solid fa-link" style="margin-right:5px;"></i> Cek File</a>`;
                     }
@@ -324,20 +306,27 @@
                     `;
                     container.appendChild(card);
                 });
-            } catch (err) { console.error(err); }
+            } catch (err) {
+                container.innerHTML = `<div class="loading-text" style="color:red;">Error mengambil data rekap: ${err.message}</div>`;
+            }
         }
 
-        // --- FUNGSI 2: HAPUS REKAP DARI CLOUD ---
         async function deleteNotulen(id) {
-            if (!confirm("Hapus permanen data ini?")) return;
-            await supabaseClient.from('notulensi').delete().eq('id', id);
-            loadNotulensi();
+            if (!confirm("Yakin ingin menghapus data ini secara permanen dari Database Cloud?")) return;
+            try {
+                const { error } = await supabaseClient.from('notulensi').delete().eq('id', id);
+                if(error) throw error;
+                alert("Sukses dihapus!");
+                loadNotulensi(); 
+            } catch (err) { 
+                alert("Gagal menghapus! Cek pengaturan RLS tabel Anda. Pesan Error: " + err.message); 
+            }
         }
 
-        // --- FUNGSI 3: UPLOAD KE LAYAR SEMENTARA (UNDANGAN & ABSEN) ---
+        // 2. FUNGSI PREVIEW FILE
         function handleSingleFile(input, previewId) {
             const container = document.getElementById(previewId); 
-            if (!container) return; // Anti Error Check
+            if (!container) return; 
             container.innerHTML = ""; 
 
             if (input.files && input.files[0]) {
@@ -346,31 +335,25 @@
 
                 if(previewId === 'previewUndangan') {
                     dataUndanganFile = file;
-                    const metaDiv = document.getElementById('printUndanganMeta');
-                    if(metaDiv) {
-                        metaDiv.style.display = 'block';
-                        if(isImage) {
-                            const reader = new FileReader();
-                            reader.onload = e => document.getElementById('printUndanganImage').innerHTML = `<img src="${e.target.result}">`;
-                            reader.readAsDataURL(file);
-                        } else {
-                            document.getElementById('printUndanganImage').innerHTML = `<p style="font-style:italic;">[Dokumen berformat PDF telah dilampirkan]</p>`;
-                        }
+                    document.getElementById('printUndanganMeta').style.display = 'block';
+                    if(isImage) {
+                        const reader = new FileReader();
+                        reader.onload = e => document.getElementById('printUndanganImage').innerHTML = `<img src="${e.target.result}">`;
+                        reader.readAsDataURL(file);
+                    } else {
+                        document.getElementById('printUndanganImage').innerHTML = `<p style="font-style:italic;">[Dokumen berformat PDF telah dilampirkan]</p>`;
                     }
                 }
 
                 if(previewId === 'previewAbsen') {
                     dataAbsenFile = file;
-                    const metaDiv = document.getElementById('printAbsenMeta');
-                    if(metaDiv) {
-                        metaDiv.style.display = 'block';
-                        if(isImage) {
-                            const reader = new FileReader();
-                            reader.onload = e => document.getElementById('printAbsenImage').innerHTML = `<img src="${e.target.result}">`;
-                            reader.readAsDataURL(file);
-                        } else {
-                            document.getElementById('printAbsenImage').innerHTML = `<p style="font-style:italic;">[Dokumen berformat PDF telah dilampirkan]</p>`;
-                        }
+                    document.getElementById('printAbsenMeta').style.display = 'block';
+                    if(isImage) {
+                        const reader = new FileReader();
+                        reader.onload = e => document.getElementById('printAbsenImage').innerHTML = `<img src="${e.target.result}">`;
+                        reader.readAsDataURL(file);
+                    } else {
+                        document.getElementById('printAbsenImage').innerHTML = `<p style="font-style:italic;">[Dokumen berformat PDF telah dilampirkan]</p>`;
                     }
                 }
 
@@ -379,29 +362,25 @@
             }
         }
 
-        // --- FUNGSI 4: HAPUS FILE DARI LAYAR SEMENTARA ---
         function removeSingleFile(previewId) {
             const container = document.getElementById(previewId);
-            if (container) container.innerHTML = ""; // Anti Error Check
+            if (container) container.innerHTML = "";
 
             if(previewId === 'previewUndangan') {
-                document.getElementById('fileUndangan').value = ""; dataUndanganFile = null;
-                const metaDiv = document.getElementById('printUndanganMeta');
-                if(metaDiv) metaDiv.style.display = 'none'; 
-                const imgDiv = document.getElementById('printUndanganImage');
-                if(imgDiv) imgDiv.innerHTML = "";
+                document.getElementById('fileUndangan').value = ""; 
+                dataUndanganFile = null;
+                document.getElementById('printUndanganMeta').style.display = 'none'; 
+                document.getElementById('printUndanganImage').innerHTML = "";
             }
             if(previewId === 'previewAbsen') {
-                document.getElementById('fileAbsen').value = ""; dataAbsenFile = null;
-                const metaDiv = document.getElementById('printAbsenMeta');
-                if(metaDiv) metaDiv.style.display = 'none'; 
-                const imgDiv = document.getElementById('printAbsenImage');
-                if(imgDiv) imgDiv.innerHTML = "";
+                document.getElementById('fileAbsen').value = ""; 
+                dataAbsenFile = null;
+                document.getElementById('printAbsenMeta').style.display = 'none'; 
+                document.getElementById('printAbsenImage').innerHTML = "";
             }
             checkAttachmentsVisibility();
         }
 
-        // --- FUNGSI 5: UPLOAD BANYAK FOTO KE LAYAR SEMENTARA ---
         function handleMultipleImages(input) {
             if (input.files) {
                 Array.from(input.files).forEach(file => {
@@ -409,10 +388,8 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         uploadedPhotos.push(file);
-                        const galUi = document.getElementById('previewFotoGallery');
-                        const galPrint = document.getElementById('printPhotosGallery');
-                        if(galUi) galUi.innerHTML += `<div class="gallery-img-wrapper"><img src="${e.target.result}"></div>`;
-                        if(galPrint) galPrint.innerHTML += `<div class="print-gallery-item"><img src="${e.target.result}"><p>Kegiatan: ${file.name}</p></div>`;
+                        document.getElementById('previewFotoGallery').innerHTML += `<div class="gallery-img-wrapper"><img src="${e.target.result}"></div>`;
+                        document.getElementById('printPhotosGallery').innerHTML += `<div class="print-gallery-item"><img src="${e.target.result}"><p>Kegiatan: ${file.name}</p></div>`;
                         checkAttachmentsVisibility();
                     }
                     reader.readAsDataURL(file);
@@ -420,10 +397,9 @@
             }
         }
 
-        // --- FUNGSI 6: MENGONTROL HALAMAN LAMPIRAN SAAT CETAK ---
         function checkAttachmentsVisibility() {
             const zone = document.getElementById('printAttachmentsZone');
-            if (!zone) return; // Anti Error Check
+            if (!zone) return;
             if (uploadedPhotos.length > 0 || dataUndanganFile || dataAbsenFile) {
                 zone.setAttribute("style", "display: block !important;");
             } else {
@@ -431,7 +407,7 @@
             }
         }
 
-        // --- FUNGSI 7: MENCETAK DATA SAAT INI (KERTAS FISIK) ---
+        // 3. FUNGSI CETAK
         function triggerPrint() {
             checkAttachmentsVisibility(); 
             document.getElementById('p-judul').innerText = document.getElementById('judul').value || '-';
@@ -444,7 +420,6 @@
             window.print();
         }
 
-        // --- FUNGSI 8: MENCETAK DATA LAMA DARI REKAP CLOUD ---
         function triggerPrintFromData(id) {
             const item = localDataNotulensi.find(x => x.id === id);
             if (!item) return;
@@ -456,23 +431,20 @@
             document.getElementById('p-isi').innerText = item.isi_notulen || '-';
             document.getElementById('p-current-date').innerText = new Date().toLocaleDateString('id-ID');
             
-            // Sembunyikan halaman lampiran untuk arsip cetak lama
-            const zone = document.getElementById('printAttachmentsZone');
-            if(zone) zone.setAttribute("style", "display: none !important;");
+            document.getElementById('printAttachmentsZone').setAttribute("style", "display: none !important;");
             window.print();
         }
 
-        // --- FUNGSI 9: MESIN SIMPAN KE DATABASE & STORAGE CLOUD (ANTI-ERROR) ---
+        // 4. MESIN SIMPAN KE DATABASE & UPLOAD FILE KE STORAGE CLOUD
         async function saveNotulen(event) {
             event.preventDefault();
-            
+
             const btnSimpan = document.getElementById('btnSimpan');
             const statusDot = document.getElementById('supabaseDot');
             const statusText = document.getElementById('supabaseText');
             
-            // Animasi Loading
             btnSimpan.disabled = true;
-            btnSimpan.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengunggah...';
+            btnSimpan.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengunggah File...';
             statusDot.classList.replace('connected', 'uploading');
             statusText.innerText = "Sedang mengirim file dan data ke server Supabase...";
 
@@ -481,14 +453,13 @@
                 let urlAbsen = "";
                 let urlFotos = [];
 
-                // Proses Upload File Undangan (ke Bucket Storage)
+                // Proses Upload File Undangan
                 if (dataUndanganFile) {
                     const ext = dataUndanganFile.name.split('.').pop();
                     const fileName = `undangan_${Date.now()}.${ext}`;
                     const { data, error } = await supabaseClient.storage.from('berkas_notulen').upload(fileName, dataUndanganFile);
-                    if (!error && data) {
-                        urlUndangan = supabaseClient.storage.from('berkas_notulen').getPublicUrl(fileName).data.publicUrl;
-                    }
+                    if (error) throw new Error("GAGAL_STORAGE: Surat Undangan - " + error.message);
+                    if (data) urlUndangan = supabaseClient.storage.from('berkas_notulen').getPublicUrl(fileName).data.publicUrl;
                 }
 
                 // Proses Upload File Absen
@@ -496,9 +467,8 @@
                     const ext = dataAbsenFile.name.split('.').pop();
                     const fileName = `absen_${Date.now()}.${ext}`;
                     const { data, error } = await supabaseClient.storage.from('berkas_notulen').upload(fileName, dataAbsenFile);
-                    if (!error && data) {
-                        urlAbsen = supabaseClient.storage.from('berkas_notulen').getPublicUrl(fileName).data.publicUrl;
-                    }
+                    if (error) throw new Error("GAGAL_STORAGE: Daftar Hadir - " + error.message);
+                    if (data) urlAbsen = supabaseClient.storage.from('berkas_notulen').getPublicUrl(fileName).data.publicUrl;
                 }
 
                 // Proses Upload Semua Foto Kegiatan
@@ -508,14 +478,15 @@
                         const ext = file.name.split('.').pop();
                         const fileName = `foto_${Date.now()}_${i}.${ext}`;
                         const { data, error } = await supabaseClient.storage.from('berkas_notulen').upload(fileName, file);
-                        if (!error && data) {
+                        if (error) throw new Error("GAGAL_STORAGE: Foto Kegiatan - " + error.message);
+                        if (data) {
                             const pUrl = supabaseClient.storage.from('berkas_notulen').getPublicUrl(fileName).data.publicUrl;
                             urlFotos.push(pUrl);
                         }
                     }
                 }
 
-                // Payload: Gabungkan Teks Form + URL Link dari Storage File
+                // Ambil semua data Teks + Link URL File untuk disimpan di tabel
                 const payload = {
                     judul: document.getElementById('judul').value, 
                     tanggal: document.getElementById('tanggal').value,
@@ -525,27 +496,26 @@
                     isi_notulen: document.getElementById('isiNotulen').value,
                     file_undangan: urlUndangan,
                     file_absen: urlAbsen,
-                    file_foto: urlFotos.join(','), // Kumpulan URL Foto
+                    file_foto: urlFotos.join(','),
                     created_at: new Date()
                 };
 
-                // Tembakkan Teks + Link ke tabel Database (Table: notulensi)
+                // Tembakkan ke database Supabase
                 const { error: dbError } = await supabaseClient.from('notulensi').insert([payload]);
-                if (dbError) throw dbError;
+                
+                // JIKA TERJADI ERROR DARI DATABASE (seperti masalah RLS yang ada di gambar)
+                if (dbError) throw new Error("GAGAL_DATABASE: " + dbError.message);
 
                 alert("Selamat! Semua Data & Lampiran Berkas berhasil disimpan ke Cloud Supabase!");
                 
-                // RESET HALAMAN (Anti Error Null innerHTML check)
+                // RESET HALAMAN
                 document.getElementById('notulenForm').reset();
-                
                 const galUi = document.getElementById('previewFotoGallery');
                 const galPrint = document.getElementById('printPhotosGallery');
                 if (galUi) galUi.innerHTML = "";
                 if (galPrint) galPrint.innerHTML = "";
-                
                 removeSingleFile('previewUndangan'); 
                 removeSingleFile('previewAbsen');
-                
                 uploadedPhotos = []; 
                 checkAttachmentsVisibility(); 
                 
@@ -553,7 +523,14 @@
                 loadNotulensi();
 
             } catch (err) { 
-                alert("Gagal mengunggah! Pastikan kamu sudah membuat Bucket Storage bernama 'berkas_notulen' dengan policy Public. Detail: " + err.message); 
+                // PEMISAHAN PESAN ERROR AGAR LEBIH AKURAT
+                if (err.message.includes("GAGAL_DATABASE")) {
+                    alert("Akses ditolak oleh Database!\n\nPenyebab: " + err.message.replace("GAGAL_DATABASE: ", "") + "\n\nSolusi: Buka Supabase, masuk ke Table 'notulensi', dan matikan/disable fitur RLS (Row-Level Security), ATAU buat Policy baru yang mengizinkan INSERT.");
+                } else if (err.message.includes("GAGAL_STORAGE")) {
+                    alert("File gagal diunggah!\n\nPenyebab: " + err.message.replace("GAGAL_STORAGE: ", "") + "\n\nSolusi: Pastikan Anda sudah membuat Bucket di Storage dengan nama 'berkas_notulen' dan menyetelnya ke Public.");
+                } else {
+                    alert("Terjadi kesalahan tidak terduga: " + err.message);
+                }
             } finally {
                 // Kembalikan tombol seperti semula
                 btnSimpan.disabled = false;
