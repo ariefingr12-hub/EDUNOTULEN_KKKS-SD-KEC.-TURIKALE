@@ -142,9 +142,7 @@
 <body>
 
     <div class="app-container">
-        <!-- HEADER UI UTAMA -->
         <header>
-            <!-- Pastikan nama file logo benar (misal: logo.png) -->
             <img src="logo.png" alt="Logo KKKS-SD" class="header-logo" onerror="this.style.display='none'">
             <h1>Sistem Informasi E-Notulen</h1>
             <p>KKKS-SD Kecamatan Turikale, Kabupaten Maros, Provinsi Sulawesi Selatan</p>
@@ -210,12 +208,8 @@
         </section>
     </div>
 
-    <!-- AREA KHUSUS CETAK (PRINT) -->
     <div id="printable-document">
-        
-        <!-- KOP SURAT RESMI -->
         <div class="print-kop">
-            <!-- Ganti URL atau nama file logo di bawah ini dengan logo instansi kamu -->
             <img src="logo.png" alt="Logo" class="print-logo" onerror="this.src='https://via.placeholder.com/100?text=LOGO'">
             <div class="print-kop-text">
                 <h2>PEMERINTAH KABUPATEN MAROS</h2>
@@ -247,7 +241,6 @@
             </tr>
         </table>
 
-        <!-- LAMPIRAN (Akan muncul di halaman baru saat print jika ada file) -->
         <div class="print-attachments-page" id="printAttachmentsZone" style="display: none;">
             <div class="print-attachments-title">LAMPIRAN DOKUMENTASI</div>
             
@@ -266,7 +259,6 @@
     </div>
 
     <script>
-        // KONFIGURASI SUPABASE (Tetap sama seperti milikmu)
         const SUPABASE_URL = "https://wylkasidfbfhowozcuce.supabase.co"; 
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5bGthc2lkZmJmaG93b3pjdWNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTc2ODAsImV4cCI6MjA5NTE3MzY4MH0.JGkdTtl3Nh1LcDeR_dzC1lMiA_IslkQQ3QJFtu3u07A";
         
@@ -308,6 +300,7 @@
                     }
 
                     const card = document.createElement('div'); card.className = 'rekap-card';
+                    /* PERBAIKAN: Menambahkan tanda kutip tunggal di sekitar parameter id pada fungsi deleteNotulen dan triggerPrintFromData */
                     card.innerHTML = `
                         <div>
                             <div class="rekap-title">${item.judul || '-'} ${fileBadge}</div>
@@ -319,8 +312,8 @@
                         </div>
                         <div class="rekap-actions">
                             ${viewFilesBtn}
-                            <button class="btn btn-sm btn-delete" onclick="deleteNotulen(${item.id})">Hapus</button>
-                            <button class="btn btn-sm btn-load-print" onclick="triggerPrintFromData(${item.id})">Cetak Arsip</button>
+                            <button class="btn btn-sm btn-delete" onclick="deleteNotulen('${item.id}')">Hapus</button>
+                            <button class="btn btn-sm btn-load-print" onclick="triggerPrintFromData('${item.id}')">Cetak Arsip</button>
                         </div>
                     `;
                     container.appendChild(card);
@@ -441,8 +434,12 @@
 
         // 4. FUNGSI CETAK DARI DATABASE CLOUD (DIPERBARUI)
         function triggerPrintFromData(id) {
-            const item = localDataNotulensi.find(x => x.id === id);
-            if (!item) return;
+            /* PERBAIKAN: Konversi tipe id ke string agar pencarian kebal terhadap perbedaan tipe data (Number maupun UUID) */
+            const item = localDataNotulensi.find(x => String(x.id) === String(id));
+            if (!item) {
+                alert("Gagal mencetak: Data tidak ditemukan!");
+                return;
+            }
 
             // Masukkan data ke teks
             document.getElementById('p-judul').innerText = item.judul || '-';
