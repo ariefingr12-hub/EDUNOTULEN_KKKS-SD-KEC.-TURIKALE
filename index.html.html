@@ -99,15 +99,33 @@
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
         /* ========================================================
-           2. FORMAT KERTAS CETAK (PRINT) DENGAN KOP RESMI
+           2. FORMAT KERTAS CETAK (PRINT) - DIPERBAIKI TOTAL AGAR TIDAK KOSONG BLANK
            ======================================================== */
         #printable-document { display: none; }
         @media print {
-            body, .app-container, .main-panel, body::before, body::after, .rekap-panel { background: #ffffff !important; color: #000000 !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-            header, .main-panel, .action-container, .status-badge, .rekap-panel { display: none !important; }
-            #printable-document { display: block !important; padding: 40px; font-family: 'Times New Roman', Times, serif; color: #000; line-height: 1.6; }
+            /* Sembunyikan SEMUA elemen latar belakang modern yang merusak kertas cetak */
+            .app-container, body::before, body::after { 
+                display: none !important; 
+            }
             
-            /* Gaya Kop Surat Baru */
+            /* Bersihkan background body agar tidak menutupi dokumen */
+            body { 
+                background: #ffffff !important; 
+                color: #000000 !important; 
+                padding: 0 !important; 
+                margin: 0 !important; 
+            }
+            
+            /* Tampilkan area dokumen dengan jelas */
+            #printable-document { 
+                display: block !important; 
+                padding: 40px; 
+                font-family: 'Times New Roman', Times, serif; 
+                color: #000; 
+                line-height: 1.6; 
+                width: 100%;
+            }
+            
             .print-kop { display: flex; align-items: center; margin-bottom: 5px; }
             .print-logo { width: 90px; height: auto; margin-right: 20px; object-fit: contain; }
             .print-kop-text { flex: 1; text-align: center; text-transform: uppercase; padding-right: 90px; }
@@ -126,7 +144,6 @@
             .print-signatures { margin-top: 50px; width: 100%; page-break-inside: avoid; }
             .print-signatures td { width: 50%; text-align: center; font-size: 11pt; }
             
-            /* Gaya Lampiran Print */
             .print-attachments-page { page-break-before: always; padding-top: 20px; }
             .print-attachments-title { font-size: 13pt; font-weight: bold; text-align: center; margin-bottom: 25px; text-transform: uppercase; border-bottom: 2px solid #000; padding-bottom: 5px; }
             .attachment-meta-info { font-size: 11pt; margin-bottom: 20px; padding: 15px; border: 1px dashed #666; page-break-inside: avoid; background: #fafafa; }
@@ -209,6 +226,7 @@
     </div>
 
     <div id="printable-document">
+        
         <div class="print-kop">
             <img src="logo.png" alt="Logo" class="print-logo" onerror="this.src='https://via.placeholder.com/100?text=LOGO'">
             <div class="print-kop-text">
@@ -274,7 +292,6 @@
 
         loadNotulensi();
 
-        // 1. FUNGSI MENAMPILKAN REKAP DATA CLOUD
         async function loadNotulensi() {
             const container = document.getElementById('rekapContainer');
             if(!container) return;
@@ -300,7 +317,7 @@
                     }
 
                     const card = document.createElement('div'); card.className = 'rekap-card';
-                    /* PERBAIKAN: Menambahkan tanda kutip tunggal di sekitar parameter id pada fungsi deleteNotulen dan triggerPrintFromData */
+                    // PERBAIKAN FATAL 2: Kutip satu pada parameter id ditambahkan kembali
                     card.innerHTML = `
                         <div>
                             <div class="rekap-title">${item.judul || '-'} ${fileBadge}</div>
@@ -326,16 +343,15 @@
         async function deleteNotulen(id) {
             if (!confirm("Yakin ingin menghapus data ini secara permanen dari Database Cloud?")) return;
             try {
-                const { error } = await supabaseClient.from('notulensi').delete().eq('id', id);
+                const { error } = await supabaseClient.from('notulensi').delete().eq('id', String(id));
                 if(error) throw error;
                 alert("Sukses dihapus!");
                 loadNotulensi(); 
             } catch (err) { 
-                alert("Gagal menghapus! Cek pengaturan RLS tabel Anda. Pesan Error: " + err.message); 
+                alert("Gagal menghapus! Pesan Error: " + err.message); 
             }
         }
 
-        // 2. FUNGSI PREVIEW FILE
         function handleSingleFile(input, previewId) {
             const container = document.getElementById(previewId); 
             if (!container) return; 
@@ -419,95 +435,95 @@
             }
         }
 
-        // 3. FUNGSI CETAK UNTUK FORM YANG SEDANG DIISI
-        function triggerPrint() {
-            checkAttachmentsVisibility(); 
-            document.getElementById('p-judul').innerText = document.getElementById('judul').value || '-';
-            document.getElementById('p-tanggal').innerText = document.getElementById('tanggal').value || '-';
-            document.getElementById('p-waktu').innerText = document.getElementById('waktu').value || '-';
-            document.getElementById('p-tempat').innerText = document.getElementById('tempat').value || '-';
-            document.getElementById('p-pemimpin').innerText = document.getElementById('pemimpin').value || '-';
-            document.getElementById('p-isi').innerText = document.getElementById('isiNotulen').value || '-';
-            document.getElementById('p-current-date').innerText = new Date().toLocaleDateString('id-ID');
-            window.print();
+        // FUNGSI CETAK DIPERKUAT DENGAN TRY-CATCH
+        window.triggerPrint = function() {
+            try {
+                checkAttachmentsVisibility(); 
+                document.getElementById('p-judul').innerText = document.getElementById('judul').value || '-';
+                document.getElementById('p-tanggal').innerText = document.getElementById('tanggal').value || '-';
+                document.getElementById('p-waktu').innerText = document.getElementById('waktu').value || '-';
+                document.getElementById('p-tempat').innerText = document.getElementById('tempat').value || '-';
+                document.getElementById('p-pemimpin').innerText = document.getElementById('pemimpin').value || '-';
+                document.getElementById('p-isi').innerText = document.getElementById('isiNotulen').value || '-';
+                document.getElementById('p-current-date').innerText = new Date().toLocaleDateString('id-ID');
+                
+                // Langsung jalankan eksekusi print tanpa delay agar tidak diblokir browser
+                window.print();
+            } catch (err) {
+                alert("Sistem Cetak Gagal: " + err.message);
+            }
         }
 
-        // 4. FUNGSI CETAK DARI DATABASE CLOUD (DIPERBARUI)
-        function triggerPrintFromData(id) {
-            /* PERBAIKAN: Konversi tipe id ke string agar pencarian kebal terhadap perbedaan tipe data (Number maupun UUID) */
-            const item = localDataNotulensi.find(x => String(x.id) === String(id));
-            if (!item) {
-                alert("Gagal mencetak: Data tidak ditemukan!");
-                return;
-            }
-
-            // Masukkan data ke teks
-            document.getElementById('p-judul').innerText = item.judul || '-';
-            document.getElementById('p-tanggal').innerText = item.tanggal || '-';
-            document.getElementById('p-waktu').innerText = item.waktu || '-';
-            document.getElementById('p-tempat').innerText = item.tempat || '-';
-            document.getElementById('p-pemimpin').innerText = item.pemimpin_rapat || '-';
-            document.getElementById('p-isi').innerText = item.isi_notulen || '-';
-            
-            // Format Tanggal
-            const dateObj = new Date(item.created_at);
-            document.getElementById('p-current-date').innerText = isNaN(dateObj) ? new Date().toLocaleDateString('id-ID') : dateObj.toLocaleDateString('id-ID');
-            
-            // Siapkan Area Lampiran
-            document.getElementById('printUndanganMeta').style.display = 'none';
-            document.getElementById('printAbsenMeta').style.display = 'none';
-            document.getElementById('printPhotosGallery').innerHTML = '';
-            
-            let hasAttachments = false;
-
-            // Proses File Undangan
-            if (item.file_undangan) {
-                document.getElementById('printUndanganMeta').style.display = 'block';
-                if(item.file_undangan.match(/\.(jpeg|jpg|gif|png)$/i)) {
-                    document.getElementById('printUndanganImage').innerHTML = `<img src="${item.file_undangan}">`;
-                } else {
-                    document.getElementById('printUndanganImage').innerHTML = `<p style="margin-top:10px;">Terdapat dokumen PDF. <strong><a href="${item.file_undangan}" target="_blank">Lihat/Download Undangan (PDF)</a></strong></p>`;
+        window.triggerPrintFromData = function(id) {
+            try {
+                const item = localDataNotulensi.find(x => String(x.id) === String(id));
+                if (!item) {
+                    alert("Gagal memuat: Data arsip tidak ditemukan!");
+                    return;
                 }
-                hasAttachments = true;
-            }
 
-            // Proses File Absen
-            if (item.file_absen) {
-                document.getElementById('printAbsenMeta').style.display = 'block';
-                if(item.file_absen.match(/\.(jpeg|jpg|gif|png)$/i)) {
-                    document.getElementById('printAbsenImage').innerHTML = `<img src="${item.file_absen}">`;
-                } else {
-                    document.getElementById('printAbsenImage').innerHTML = `<p style="margin-top:10px;">Terdapat dokumen PDF. <strong><a href="${item.file_absen}" target="_blank">Lihat/Download Daftar Hadir (PDF)</a></strong></p>`;
-                }
-                hasAttachments = true;
-            }
+                document.getElementById('p-judul').innerText = item.judul || '-';
+                document.getElementById('p-tanggal').innerText = item.tanggal || '-';
+                document.getElementById('p-waktu').innerText = item.waktu || '-';
+                document.getElementById('p-tempat').innerText = item.tempat || '-';
+                document.getElementById('p-pemimpin').innerText = item.pemimpin_rapat || '-';
+                document.getElementById('p-isi').innerText = item.isi_notulen || '-';
+                
+                const dateObj = new Date(item.created_at);
+                document.getElementById('p-current-date').innerText = isNaN(dateObj) ? new Date().toLocaleDateString('id-ID') : dateObj.toLocaleDateString('id-ID');
+                
+                document.getElementById('printUndanganMeta').style.display = 'none';
+                document.getElementById('printAbsenMeta').style.display = 'none';
+                document.getElementById('printPhotosGallery').innerHTML = '';
+                
+                let hasAttachments = false;
 
-            // Proses Banyak Foto
-            if (item.file_foto) {
-                const fotos = item.file_foto.split(',');
-                let galleryHTML = '';
-                fotos.forEach((url, index) => {
-                    if(url.trim() !== '') {
-                        galleryHTML += `<div class="print-gallery-item"><img src="${url}"><p>Dokumentasi ${index + 1}</p></div>`;
-                        hasAttachments = true;
+                if (item.file_undangan) {
+                    document.getElementById('printUndanganMeta').style.display = 'block';
+                    if(item.file_undangan.match(/\.(jpeg|jpg|gif|png)$/i)) {
+                        document.getElementById('printUndanganImage').innerHTML = `<img src="${item.file_undangan}">`;
+                    } else {
+                        document.getElementById('printUndanganImage').innerHTML = `<p style="margin-top:10px;">Dokumen PDF Terlampir. <strong><a href="${item.file_undangan}" target="_blank">Lihat (PDF)</a></strong></p>`;
                     }
-                });
-                document.getElementById('printPhotosGallery').innerHTML = galleryHTML;
-            }
+                    hasAttachments = true;
+                }
 
-            // Tampilkan atau Sembunyikan Halaman Lampiran
-            const zone = document.getElementById('printAttachmentsZone');
-            if (hasAttachments) {
-                zone.setAttribute("style", "display: block !important;");
-            } else {
-                zone.setAttribute("style", "display: none !important;");
+                if (item.file_absen) {
+                    document.getElementById('printAbsenMeta').style.display = 'block';
+                    if(item.file_absen.match(/\.(jpeg|jpg|gif|png)$/i)) {
+                        document.getElementById('printAbsenImage').innerHTML = `<img src="${item.file_absen}">`;
+                    } else {
+                        document.getElementById('printAbsenImage').innerHTML = `<p style="margin-top:10px;">Dokumen PDF Terlampir. <strong><a href="${item.file_absen}" target="_blank">Lihat (PDF)</a></strong></p>`;
+                    }
+                    hasAttachments = true;
+                }
+
+                if (item.file_foto) {
+                    const fotos = item.file_foto.split(',');
+                    let galleryHTML = '';
+                    fotos.forEach((url, index) => {
+                        if(url.trim() !== '') {
+                            galleryHTML += `<div class="print-gallery-item"><img src="${url}"><p>Dokumentasi ${index + 1}</p></div>`;
+                            hasAttachments = true;
+                        }
+                    });
+                    document.getElementById('printPhotosGallery').innerHTML = galleryHTML;
+                }
+
+                const zone = document.getElementById('printAttachmentsZone');
+                if (hasAttachments) {
+                    zone.setAttribute("style", "display: block !important;");
+                    // Delay singkat hanya jika butuh load gambar arsip
+                    setTimeout(() => { window.print(); }, 500);
+                } else {
+                    zone.setAttribute("style", "display: none !important;");
+                    window.print();
+                }
+            } catch (err) {
+                alert("Sistem Cetak Arsip Gagal: " + err.message);
             }
-            
-            // Beri waktu sejenak agar gambar dari cloud dimuat sebelum jendela print terbuka
-            setTimeout(() => { window.print(); }, 500);
         }
 
-        // 5. MESIN SIMPAN KE DATABASE & UPLOAD FILE KE STORAGE CLOUD
         async function saveNotulen(event) {
             event.preventDefault();
 
@@ -525,7 +541,6 @@
                 let urlAbsen = "";
                 let urlFotos = [];
 
-                // Proses Upload File Undangan
                 if (dataUndanganFile) {
                     const ext = dataUndanganFile.name.split('.').pop();
                     const fileName = `undangan_${Date.now()}.${ext}`;
@@ -534,7 +549,6 @@
                     if (data) urlUndangan = supabaseClient.storage.from('berkas_notulen').getPublicUrl(fileName).data.publicUrl;
                 }
 
-                // Proses Upload File Absen
                 if (dataAbsenFile) {
                     const ext = dataAbsenFile.name.split('.').pop();
                     const fileName = `absen_${Date.now()}.${ext}`;
@@ -543,7 +557,6 @@
                     if (data) urlAbsen = supabaseClient.storage.from('berkas_notulen').getPublicUrl(fileName).data.publicUrl;
                 }
 
-                // Proses Upload Semua Foto Kegiatan
                 if (uploadedPhotos.length > 0) {
                     for (let i = 0; i < uploadedPhotos.length; i++) {
                         const file = uploadedPhotos[i];
@@ -558,7 +571,6 @@
                     }
                 }
 
-                // Ambil semua data Teks + Link URL File untuk disimpan di tabel
                 const payload = {
                     judul: document.getElementById('judul').value, 
                     tanggal: document.getElementById('tanggal').value,
@@ -572,14 +584,12 @@
                     created_at: new Date()
                 };
 
-                // Tembakkan ke database Supabase
                 const { error: dbError } = await supabaseClient.from('notulensi').insert([payload]);
                 
                 if (dbError) throw new Error("GAGAL_DATABASE: " + dbError.message);
 
                 alert("Selamat! Semua Data & Lampiran Berkas berhasil disimpan ke Cloud Supabase!");
                 
-                // RESET HALAMAN
                 document.getElementById('notulenForm').reset();
                 const galUi = document.getElementById('previewFotoGallery');
                 const galPrint = document.getElementById('printPhotosGallery');
@@ -590,14 +600,13 @@
                 uploadedPhotos = []; 
                 checkAttachmentsVisibility(); 
                 
-                // Panggil ulang rekap (Auto-refresh)
                 loadNotulensi();
 
             } catch (err) { 
                 if (err.message.includes("GAGAL_DATABASE")) {
-                    alert("Akses ditolak oleh Database!\n\nPenyebab: " + err.message.replace("GAGAL_DATABASE: ", "") + "\n\nSolusi: Buka Supabase, masuk ke Table 'notulensi', dan matikan/disable fitur RLS (Row-Level Security), ATAU buat Policy baru yang mengizinkan INSERT.");
+                    alert("Akses ditolak oleh Database!\nPenyebab: " + err.message.replace("GAGAL_DATABASE: ", ""));
                 } else if (err.message.includes("GAGAL_STORAGE")) {
-                    alert("File gagal diunggah!\n\nPenyebab: " + err.message.replace("GAGAL_STORAGE: ", "") + "\n\nSolusi: Pastikan Anda sudah membuat Bucket di Storage dengan nama 'berkas_notulen' dan menyetelnya ke Public.");
+                    alert("File gagal diunggah!\nPenyebab: " + err.message.replace("GAGAL_STORAGE: ", ""));
                 } else {
                     alert("Terjadi kesalahan tidak terduga: " + err.message);
                 }
