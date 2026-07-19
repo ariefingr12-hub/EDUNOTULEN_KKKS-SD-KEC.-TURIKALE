@@ -1,289 +1,9 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Notulen KKKS-SD Turikale</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <style>
-        /* ========================================================
-           1. TAMPILAN LAYAR (UI) - MODERN CYBER/GLASSMORPHISM
-           ======================================================== */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-            --bg-dark: #030712; --panel-bg: rgba(9, 17, 36, 0.65); --panel-border: rgba(0, 242, 254, 0.25);
-            --text-primary: #f8fafc; --text-secondary: #94a3b8; --accent-cyan: #00f2fe;
-            --accent-blue: #38bdf8; --accent-glow: rgba(0, 242, 254, 0.45); --accent-success: #10b981;
-        }
-
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-dark); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; position: relative; }
-
-        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 15% 20%, rgba(0, 242, 254, 0.18) 0%, transparent 45%), radial-gradient(circle at 85% 75%, rgba(168, 85, 247, 0.15) 0%, transparent 50%), radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 40%), linear-gradient(145deg, #020617 0%, #0b1528 50%, #030712 100%); z-index: -2; background-size: 200% 200%; animation: cosmicShift 25s ease infinite; }
-        @keyframes cosmicShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px); background-size: 40px 40px; z-index: -1; pointer-events: none; }
-
-        .app-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
-
-        header { background: var(--panel-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--panel-border); border-radius: 20px; padding: 30px; margin-bottom: 30px; text-align: center; position: relative; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); overflow: hidden; display: flex; flex-direction: column; align-items: center; }
-        header::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
-        .header-logo { width: 80px; height: auto; margin-bottom: 15px; filter: drop-shadow(0 0 12px var(--accent-glow)); transition: transform 0.3s ease; }
-        header h1 { font-family: 'Orbitron', sans-serif; font-size: 24px; letter-spacing: 2px; background: linear-gradient(90deg, #fff, var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; text-transform: uppercase; }
-        header p { color: var(--text-secondary); font-size: 14px; font-weight: 300; letter-spacing: 1px; }
-
-        .main-panel { background: var(--panel-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--panel-border); border-radius: 24px; padding: 40px; box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4); }
-        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; margin-bottom: 30px; }
-        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
-        .full-width { grid-column: 1 / -1; }
-
-        .input-group { display: flex; flex-direction: column; gap: 8px; }
-        .input-group label { font-size: 13px; font-weight: 600; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
-        input[type="text"], input[type="date"], input[type="time"], textarea { background: rgba(5, 12, 28, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 14px 16px; color: var(--text-primary); font-family: inherit; font-size: 15px; transition: all 0.3s ease; width: 100%; }
-        input:focus, textarea:focus { outline: none; border-color: var(--accent-cyan); box-shadow: 0 0 15px var(--accent-glow); background: rgba(5, 12, 28, 0.9); }
-        textarea { resize: vertical; min-height: 180px; line-height: 1.6; }
-
-        .upload-section { margin-top: 35px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 30px; }
-        .upload-section h3 { font-family: 'Orbitron', sans-serif; font-size: 16px; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        .upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
-        @media (max-width: 900px) { .upload-grid { grid-template-columns: 1fr; } }
-
-        .upload-wrapper { display: flex; flex-direction: column; gap: 10px; }
-        .upload-box { background: rgba(255, 255, 255, 0.02); border: 2px dashed rgba(0, 242, 254, 0.25); border-radius: 14px; padding: 25px 15px; text-align: center; cursor: pointer; transition: all 0.3s ease; position: relative; }
-        .upload-box:hover { border-color: var(--accent-cyan); background: rgba(0, 242, 254, 0.04); }
-        .upload-box i { font-size: 32px; color: var(--accent-blue); margin-bottom: 12px; }
-        .upload-box p { font-size: 13px; color: var(--text-secondary); margin-bottom: 5px; }
-        .upload-box span { font-size: 11px; color: rgba(255, 255, 255, 0.3); }
-        .upload-box input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 5; }
-
-        .file-preview-container { display: flex; flex-direction: column; gap: 8px; max-height: 150px; overflow-y: auto; text-align: left; }
-        .file-item { background: rgba(5, 12, 28, 0.8); border: 1px solid rgba(0, 242, 254, 0.3); padding: 8px 12px; border-radius: 6px; display: flex; justify-content: space-between; font-size: 12px; align-items: center; position: relative; z-index: 10; }
-        .file-item span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 80%; }
-        .file-item i { color: #ef4444; cursor: pointer; font-size: 14px; padding: 5px; }
-        .file-item i:hover { color: #f87171; }
-        
-        .gallery-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; }
-        .gallery-img-wrapper { aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); position: relative; }
-        .gallery-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-
-        .action-container { margin-top: 40px; display: flex; justify-content: flex-end; gap: 15px; }
-        .btn { font-family: 'Orbitron', sans-serif; padding: 14px 28px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; border: none; transition: all 0.3s ease; }
-        .btn-print { background: transparent; color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
-        .btn-print:hover { background: rgba(0, 242, 254, 0.1); }
-        .btn-primary { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); color: #050c1c; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(0, 242, 254, 0.6); }
-        .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
-
-        .rekap-panel { margin-top: 40px; }
-        .rekap-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(0, 242, 254, 0.2); padding-bottom: 15px; }
-        .rekap-header h2 { font-family: 'Orbitron', sans-serif; font-size: 18px; color: var(--accent-cyan); }
-        .rekap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-        .rekap-card { background: rgba(5, 12, 28, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; }
-        .rekap-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 12px; }
-        .rekap-meta { font-size: 12px; color: var(--text-secondary); margin-bottom: 15px; line-height: 1.8; }
-        .rekap-body { font-size: 13px; color: rgba(241, 245, 249, 0.85); background: rgba(255, 255, 255, 0.02); padding: 12px; border-radius: 8px; border-left: 3px solid var(--accent-blue); margin-bottom: 15px; max-height: 120px; overflow-y: auto; white-space: pre-wrap; }
-        .rekap-actions { display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px; }
-        
-        .btn-sm { padding: 8px 14px; font-size: 12px; border-radius: 8px; }
-        .btn-delete { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25); }
-        .btn-load-print { background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); border: 1px solid rgba(0, 242, 254, 0.25); }
-        .btn-view-file { background: rgba(16, 185, 129, 0.1); color: var(--accent-success); border: 1px solid rgba(16, 185, 129, 0.25); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
-
-        .status-badge { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; font-size: 12px; color: var(--text-secondary); }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #e11d48; }
-        .status-dot.connected { background: var(--accent-success); box-shadow: 0 0 8px var(--accent-success); }
-        .status-dot.uploading { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; animation: pulse 1s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-
-        /* ========================================================
-           2. FORMAT KERTAS CETAK (PRINT) - DIPERBAIKI TOTAL AGAR TIDAK KOSONG BLANK
-           ======================================================== */
-        #printable-document { display: none; }
-        @media print {
-            /* Sembunyikan SEMUA elemen latar belakang modern yang merusak kertas cetak */
-            .app-container, body::before, body::after { 
-                display: none !important; 
-            }
-            
-            /* Bersihkan background body agar tidak menutupi dokumen */
-            body { 
-                background: #ffffff !important; 
-                color: #000000 !important; 
-                padding: 0 !important; 
-                margin: 0 !important; 
-            }
-            
-            /* Tampilkan area dokumen dengan jelas */
-            #printable-document { 
-                display: block !important; 
-                padding: 40px; 
-                font-family: 'Times New Roman', Times, serif; 
-                color: #000; 
-                line-height: 1.6; 
-                width: 100%;
-            }
-            
-            .print-kop { display: flex; align-items: center; margin-bottom: 5px; }
-            .print-logo { width: 90px; height: auto; margin-right: 20px; object-fit: contain; }
-            .print-kop-text { flex: 1; text-align: center; text-transform: uppercase; padding-right: 90px; }
-            .print-kop-text h2 { font-size: 16pt; font-weight: bold; margin-bottom: 2px; }
-            .print-kop-text h3 { font-size: 14pt; font-weight: bold; margin-bottom: 2px; }
-            .print-kop-text p { font-size: 10pt; text-transform: none; margin: 0; }
-            .garis-kop-tebal { border: 0; border-top: 3px solid black; margin-bottom: 2px; }
-            .garis-kop-tipis { border: 0; border-top: 1px solid black; margin-bottom: 20px; }
-
-            .print-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin-bottom: 25px; }
-            .print-meta-table { width: 100%; margin-bottom: 25px; border-collapse: collapse; }
-            .print-meta-table td { padding: 4px 8px; vertical-align: top; font-size: 11pt; }
-            .print-meta-table td.label { width: 22%; font-weight: bold; }
-            .print-content-title { font-size: 12pt; font-weight: bold; margin-top: 20px; margin-bottom: 8px; border-bottom: 1px solid #000; padding-bottom: 3px; }
-            .print-isi { font-size: 11pt; text-align: justify; white-space: pre-wrap; margin-bottom: 30px; }
-            .print-signatures { margin-top: 50px; width: 100%; page-break-inside: avoid; }
-            .print-signatures td { width: 50%; text-align: center; font-size: 11pt; }
-            
-            .print-attachments-page { page-break-before: always; padding-top: 20px; }
-            .print-attachments-title { font-size: 13pt; font-weight: bold; text-align: center; margin-bottom: 25px; text-transform: uppercase; border-bottom: 2px solid #000; padding-bottom: 5px; }
-            .attachment-meta-info { font-size: 11pt; margin-bottom: 20px; padding: 15px; border: 1px dashed #666; page-break-inside: avoid; background: #fafafa; }
-            .attachment-meta-info img { display: block; max-width: 100%; max-height: 500px; margin-top: 15px; object-fit: contain; border: 1px solid #ddd; }
-            .attachment-meta-info a { color: blue; text-decoration: underline; }
-            .print-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
-            .print-gallery-item { border: 1px solid #ccc; padding: 10px; text-align: center; page-break-inside: avoid; }
-            .print-gallery-item img { width: 100%; max-height: 300px; object-fit: contain; background: #fff; }
-            .print-gallery-item p { font-size: 9pt; margin-top: 8px; color: #333; font-style: italic; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="app-container">
-        <header>
-            <img src="logo.png" alt="Logo KKKS-SD" class="header-logo" onerror="this.style.display='none'">
-            <h1>Sistem Informasi E-Notulen</h1>
-            <p>KKKS-SD Kecamatan Turikale, Kabupaten Maros, Provinsi Sulawesi Selatan</p>
-        </header>
-
-        <main class="main-panel">
-            <form id="notulenForm" onsubmit="saveNotulen(event)">
-                <div class="form-grid">
-                    <div class="input-group full-width"><label><i class="fa-solid fa-heading"></i> Judul Kegiatan</label><input type="text" id="judul" required placeholder="Contoh: Rapat Koordinasi Bulanan"></div>
-                    <div class="input-group"><label><i class="fa-solid fa-calendar-days"></i> Tanggal</label><input type="date" id="tanggal" required></div>
-                    <div class="input-group"><label><i class="fa-solid fa-clock"></i> Waktu</label><input type="time" id="waktu" required></div>
-                    <div class="input-group"><label><i class="fa-solid fa-location-dot"></i> Tempat</label><input type="text" id="tempat" required placeholder="Contoh: Aula SD Negeri 2"></div>
-                    <div class="input-group"><label><i class="fa-solid fa-user-tie"></i> Pemimpin Rapat</label><input type="text" id="pemimpin" required placeholder="Nama Pemimpin"></div>
-                    <div class="input-group full-width"><label><i class="fa-solid fa-file-lines"></i> Hasil Notulensi</label><textarea id="isiNotulen" required placeholder="Tuliskan hasil rapat..."></textarea></div>
-                </div>
-
-                <div class="upload-section">
-                    <h3><i class="fa-solid fa-paperclip"></i> Dokumen Lampiran & Dokumentasi</h3>
-                    <div class="upload-grid">
-                        <div class="upload-wrapper">
-                            <div class="upload-box">
-                                <i class="fa-solid fa-envelope-open-text"></i><p>Surat Undangan</p><span>PDF / Gambar</span>
-                                <input type="file" id="fileUndangan" accept=".pdf,image/*" onchange="handleSingleFile(this, 'previewUndangan')">
-                            </div>
-                            <div class="file-preview-container" id="previewUndangan"></div>
-                        </div>
-                        <div class="upload-wrapper">
-                            <div class="upload-box">
-                                <i class="fa-solid fa-clipboard-user"></i><p>Daftar Hadir</p><span>PDF / Gambar</span>
-                                <input type="file" id="fileAbsen" accept=".pdf,image/*" onchange="handleSingleFile(this, 'previewAbsen')">
-                            </div>
-                            <div class="file-preview-container" id="previewAbsen"></div>
-                        </div>
-                        <div class="upload-wrapper">
-                            <div class="upload-box">
-                                <i class="fa-solid fa-images"></i><p>Foto Kegiatan</p><span>Bisa banyak foto</span>
-                                <input type="file" id="fileFoto" accept="image/*" multiple onchange="handleMultipleImages(this)">
-                            </div>
-                            <div class="gallery-preview" id="previewFotoGallery"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="action-container">
-                    <button type="button" class="btn btn-print" onclick="triggerPrint()">
-                        <i class="fa-solid fa-print"></i> Cetak Dokumen Saat Ini
-                    </button>
-                    <button type="submit" class="btn btn-primary" id="btnSimpan">
-                        <i class="fa-solid fa-cloud-arrow-up"></i> Simpan ke Cloud
-                    </button>
-                </div>
-            </form>
-
-            <div class="status-badge"><div class="status-dot" id="supabaseDot"></div><span id="supabaseText">Menghubungkan ke Cloud...</span></div>
-        </main>
-
-        <section class="main-panel rekap-panel">
-            <div class="rekap-header">
-                <h2><i class="fa-solid fa-database"></i> Rekap Notulen Cloud</h2>
-                <button type="button" class="btn btn-print btn-sm" onclick="loadNotulensi()"><i class="fa-solid fa-rotate"></i> Sinkron Ulang</button>
-            </div>
-            <div id="rekapContainer" class="rekap-grid"><div class="loading-text" style="text-align: center; width: 100%;">Memuat data dari database...</div></div>
-        </section>
-    </div>
-
-    <div id="printable-document">
-        
-        <div class="print-kop">
-            <img src="logo.png" alt="Logo" class="print-logo" onerror="this.src='https://via.placeholder.com/100?text=LOGO'">
-            <div class="print-kop-text">
-                <h2>PEMERINTAH KABUPATEN MAROS</h2>
-                <h2>DINAS PENDIDIKAN</h2>
-                <h3>KKKS SD KECAMATAN TURIKALE</h3>
-                <p>Alamat: Jl. Contoh Alamat No. 123, Kec. Turikale, Kab. Maros, Kode Pos 90511</p>
-            </div>
-        </div>
-        <hr class="garis-kop-tebal">
-        <hr class="garis-kop-tipis">
-
-        <div class="print-title">NOTULEN HASIL RAPAT</div>
-
-        <table class="print-meta-table">
-            <tr><td class="label">Agenda / Kegiatan</td><td class="colon">:</td><td id="p-judul">-</td></tr>
-            <tr><td class="label">Hari / Tanggal</td><td class="colon">:</td><td id="p-tanggal">-</td></tr>
-            <tr><td class="label">Waktu</td><td class="colon">:</td><td id="p-waktu">-</td></tr>
-            <tr><td class="label">Tempat</td><td class="colon">:</td><td id="p-tempat">-</td></tr>
-            <tr><td class="label">Pemimpin Rapat</td><td class="colon">:</td><td id="p-pemimpin">-</td></tr>
-        </table>
-
-        <div class="print-content-title">PANDANGAN / HASIL KEPUTUSAN RAPAT:</div>
-        <div class="print-isi" id="p-isi">-</div>
-
-        <table class="print-signatures">
-            <tr>
-                <td><p>Mengetahui,</p><p style="font-weight: bold; margin-bottom: 60px;">Ketua KKKS-SD Kec. Turikale</p><p>( ___________________________ )</p></td>
-                <td><p>Maros, <span id="p-current-date"></span></p><p style="font-weight: bold; margin-bottom: 60px;">Notulis Rapat</p><p>( ___________________________ )</p></td>
-            </tr>
-        </table>
-
-        <div class="print-attachments-page" id="printAttachmentsZone" style="display: none;">
-            <div class="print-attachments-title">LAMPIRAN DOKUMENTASI</div>
-            
-            <div id="printUndanganMeta" class="attachment-meta-info" style="display: none;">
-                <strong><i class="fa-solid fa-envelope"></i> Lampiran Surat Undangan</strong>
-                <div id="printUndanganImage"></div>
-            </div>
-            
-            <div id="printAbsenMeta" class="attachment-meta-info" style="display: none;">
-                <strong><i class="fa-solid fa-users"></i> Lampiran Daftar Hadir</strong>
-                <div id="printAbsenImage"></div>
-            </div>
-
-            <div class="print-gallery" id="printPhotosGallery"></div>
-        </div>
-    </div>
-
-    <script>
-        const SUPABASE_URL = "https://wylkasidfbfhowozcuce.supabase.co"; 
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5bGthc2lkZmJmaG93b3pjdWNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTc2ODAsImV4cCI6MjA5NTE3MzY4MH0.JGkdTtl3Nh1LcDeR_dzC1lMiA_IslkQQ3QJFtu3u07A";
-        
-        let supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<script>
+        // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT DI SINI
+        const GAS_URL = "URL_WEB_APP_ANDA_DISINI"; 
         
         document.getElementById('supabaseDot').classList.add('connected');
-        document.getElementById('supabaseText').innerText = "Supabase Cloud Terkoneksi (Aman!)";
+        document.getElementById('supabaseText').innerText = "Google Apps Script Terkoneksi!";
         
         let localDataNotulensi = [];
         let uploadedPhotos = [];
@@ -292,22 +12,36 @@
 
         loadNotulensi();
 
+        // Helper untuk mengubah file menjadi Base64 (Syarat wajib untuk upload ke GAS)
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve({
+                filename: file.name,
+                mimeType: file.type,
+                base64: reader.result.split(',')[1]
+            });
+            reader.onerror = error => reject(error);
+        });
+
         async function loadNotulensi() {
             const container = document.getElementById('rekapContainer');
             if(!container) return;
-            container.innerHTML = '<div class="loading-text" style="text-align:center; width:100%;">Memuat rekap data dari Cloud...</div>';
+            container.innerHTML = '<div class="loading-text" style="text-align:center; width:100%;">Memuat rekap data dari Google Sheets...</div>';
+            
             try {
-                const { data, error } = await supabaseClient.from('notulensi').select('*').order('created_at', { ascending: false });
-                if (error) throw error;
-                localDataNotulensi = data;
+                const response = await fetch(GAS_URL);
+                const result = await response.json();
                 
-                if (!data || data.length === 0) { 
+                if (result.status !== "success" || !result.data || result.data.length === 0) { 
                     container.innerHTML = '<div class="loading-text" style="text-align:center; width:100%;">Belum ada rekaman notulensi di cloud.</div>'; 
                     return; 
                 }
                 
+                localDataNotulensi = result.data;
                 container.innerHTML = "";
-                data.forEach(item => {
+                
+                result.data.forEach(item => {
                     let fileBadge = "";
                     let viewFilesBtn = "";
                     if(item.file_undangan || item.file_absen || item.file_foto) {
@@ -317,7 +51,6 @@
                     }
 
                     const card = document.createElement('div'); card.className = 'rekap-card';
-                    // PERBAIKAN FATAL 2: Kutip satu pada parameter id ditambahkan kembali
                     card.innerHTML = `
                         <div>
                             <div class="rekap-title">${item.judul || '-'} ${fileBadge}</div>
@@ -341,17 +74,22 @@
         }
 
         async function deleteNotulen(id) {
-            if (!confirm("Yakin ingin menghapus data ini secara permanen dari Database Cloud?")) return;
+            if (!confirm("Yakin ingin menghapus data ini secara permanen dari Database?")) return;
             try {
-                const { error } = await supabaseClient.from('notulensi').delete().eq('id', String(id));
-                if(error) throw error;
-                alert("Sukses dihapus!");
-                loadNotulensi(); 
+                const response = await fetch(`${GAS_URL}?action=delete&id=${id}`);
+                const result = await response.json();
+                if(result.status === "success") {
+                    alert("Sukses dihapus!");
+                    loadNotulensi(); 
+                } else {
+                    throw new Error("Gagal menghapus data.");
+                }
             } catch (err) { 
                 alert("Gagal menghapus! Pesan Error: " + err.message); 
             }
         }
 
+        // [FUNGSI handleSingleFile, removeSingleFile, handleMultipleImages, checkAttachmentsVisibility, triggerPrint, dan triggerPrintFromData TETAP SAMA SEPERTI KODE ASLI ANDA]
         function handleSingleFile(input, previewId) {
             const container = document.getElementById(previewId); 
             if (!container) return; 
@@ -435,7 +173,6 @@
             }
         }
 
-        // FUNGSI CETAK DIPERKUAT DENGAN TRY-CATCH
         window.triggerPrint = function() {
             try {
                 checkAttachmentsVisibility(); 
@@ -447,7 +184,6 @@
                 document.getElementById('p-isi').innerText = document.getElementById('isiNotulen').value || '-';
                 document.getElementById('p-current-date').innerText = new Date().toLocaleDateString('id-ID');
                 
-                // Langsung jalankan eksekusi print tanpa delay agar tidak diblokir browser
                 window.print();
             } catch (err) {
                 alert("Sistem Cetak Gagal: " + err.message);
@@ -480,21 +216,13 @@
 
                 if (item.file_undangan) {
                     document.getElementById('printUndanganMeta').style.display = 'block';
-                    if(item.file_undangan.match(/\.(jpeg|jpg|gif|png)$/i)) {
-                        document.getElementById('printUndanganImage').innerHTML = `<img src="${item.file_undangan}">`;
-                    } else {
-                        document.getElementById('printUndanganImage').innerHTML = `<p style="margin-top:10px;">Dokumen PDF Terlampir. <strong><a href="${item.file_undangan}" target="_blank">Lihat (PDF)</a></strong></p>`;
-                    }
+                    document.getElementById('printUndanganImage').innerHTML = `<p style="margin-top:10px;">Dokumen Terlampir. <strong><a href="${item.file_undangan}" target="_blank">Lihat Berkas</a></strong></p>`;
                     hasAttachments = true;
                 }
 
                 if (item.file_absen) {
                     document.getElementById('printAbsenMeta').style.display = 'block';
-                    if(item.file_absen.match(/\.(jpeg|jpg|gif|png)$/i)) {
-                        document.getElementById('printAbsenImage').innerHTML = `<img src="${item.file_absen}">`;
-                    } else {
-                        document.getElementById('printAbsenImage').innerHTML = `<p style="margin-top:10px;">Dokumen PDF Terlampir. <strong><a href="${item.file_absen}" target="_blank">Lihat (PDF)</a></strong></p>`;
-                    }
+                    document.getElementById('printAbsenImage').innerHTML = `<p style="margin-top:10px;">Dokumen Terlampir. <strong><a href="${item.file_absen}" target="_blank">Lihat Berkas</a></strong></p>`;
                     hasAttachments = true;
                 }
 
@@ -503,7 +231,7 @@
                     let galleryHTML = '';
                     fotos.forEach((url, index) => {
                         if(url.trim() !== '') {
-                            galleryHTML += `<div class="print-gallery-item"><img src="${url}"><p>Dokumentasi ${index + 1}</p></div>`;
+                            galleryHTML += `<div class="print-gallery-item"><p>Dokumentasi ${index + 1} - <a href="${url}" target="_blank">Lihat Foto</a></p></div>`;
                             hasAttachments = true;
                         }
                     });
@@ -513,7 +241,6 @@
                 const zone = document.getElementById('printAttachmentsZone');
                 if (hasAttachments) {
                     zone.setAttribute("style", "display: block !important;");
-                    // Delay singkat hanya jika butuh load gambar arsip
                     setTimeout(() => { window.print(); }, 500);
                 } else {
                     zone.setAttribute("style", "display: none !important;");
@@ -532,42 +259,19 @@
             const statusText = document.getElementById('supabaseText');
             
             btnSimpan.disabled = true;
-            btnSimpan.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengunggah File...';
+            btnSimpan.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses Data...';
             statusDot.classList.replace('connected', 'uploading');
-            statusText.innerText = "Sedang mengirim file dan data ke server Supabase...";
+            statusText.innerText = "Sedang mengirim data ke Google Sheets...";
 
             try {
-                let urlUndangan = "";
-                let urlAbsen = "";
-                let urlFotos = [];
-
-                if (dataUndanganFile) {
-                    const ext = dataUndanganFile.name.split('.').pop();
-                    const fileName = `undangan_${Date.now()}.${ext}`;
-                    const { data, error } = await supabaseClient.storage.from('berkas_notulen').upload(fileName, dataUndanganFile);
-                    if (error) throw new Error("GAGAL_STORAGE: Surat Undangan - " + error.message);
-                    if (data) urlUndangan = supabaseClient.storage.from('berkas_notulen').getPublicUrl(fileName).data.publicUrl;
-                }
-
-                if (dataAbsenFile) {
-                    const ext = dataAbsenFile.name.split('.').pop();
-                    const fileName = `absen_${Date.now()}.${ext}`;
-                    const { data, error } = await supabaseClient.storage.from('berkas_notulen').upload(fileName, dataAbsenFile);
-                    if (error) throw new Error("GAGAL_STORAGE: Daftar Hadir - " + error.message);
-                    if (data) urlAbsen = supabaseClient.storage.from('berkas_notulen').getPublicUrl(fileName).data.publicUrl;
-                }
-
+                // Konversi semua file ke format base64
+                let undanganB64 = dataUndanganFile ? await toBase64(dataUndanganFile) : null;
+                let absenB64 = dataAbsenFile ? await toBase64(dataAbsenFile) : null;
+                let fotoB64 = [];
+                
                 if (uploadedPhotos.length > 0) {
                     for (let i = 0; i < uploadedPhotos.length; i++) {
-                        const file = uploadedPhotos[i];
-                        const ext = file.name.split('.').pop();
-                        const fileName = `foto_${Date.now()}_${i}.${ext}`;
-                        const { data, error } = await supabaseClient.storage.from('berkas_notulen').upload(fileName, file);
-                        if (error) throw new Error("GAGAL_STORAGE: Foto Kegiatan - " + error.message);
-                        if (data) {
-                            const pUrl = supabaseClient.storage.from('berkas_notulen').getPublicUrl(fileName).data.publicUrl;
-                            urlFotos.push(pUrl);
-                        }
+                        fotoB64.push(await toBase64(uploadedPhotos[i]));
                     }
                 }
 
@@ -578,17 +282,22 @@
                     tempat: document.getElementById('tempat').value,
                     pemimpin_rapat: document.getElementById('pemimpin').value, 
                     isi_notulen: document.getElementById('isiNotulen').value,
-                    file_undangan: urlUndangan,
-                    file_absen: urlAbsen,
-                    file_foto: urlFotos.join(','),
-                    created_at: new Date()
+                    file_undangan: undanganB64,
+                    file_absen: absenB64,
+                    file_foto: fotoB64
                 };
 
-                const { error: dbError } = await supabaseClient.from('notulensi').insert([payload]);
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
                 
-                if (dbError) throw new Error("GAGAL_DATABASE: " + dbError.message);
+                const result = await response.json();
+                
+                if (result.status === "error") throw new Error(result.message);
 
-                alert("Selamat! Semua Data & Lampiran Berkas berhasil disimpan ke Cloud Supabase!");
+                alert("Selamat! Semua Data & Lampiran Berkas berhasil disimpan ke Google Sheets & Drive!");
                 
                 document.getElementById('notulenForm').reset();
                 const galUi = document.getElementById('previewFotoGallery');
@@ -603,20 +312,12 @@
                 loadNotulensi();
 
             } catch (err) { 
-                if (err.message.includes("GAGAL_DATABASE")) {
-                    alert("Akses ditolak oleh Database!\nPenyebab: " + err.message.replace("GAGAL_DATABASE: ", ""));
-                } else if (err.message.includes("GAGAL_STORAGE")) {
-                    alert("File gagal diunggah!\nPenyebab: " + err.message.replace("GAGAL_STORAGE: ", ""));
-                } else {
-                    alert("Terjadi kesalahan tidak terduga: " + err.message);
-                }
+                alert("Gagal menyimpan data: " + err.message);
             } finally {
                 btnSimpan.disabled = false;
-                btnSimpan.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Simpan ke Cloud';
+                btnSimpan.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Simpan ke Database';
                 statusDot.classList.replace('uploading', 'connected');
-                statusText.innerText = "Supabase Cloud Terkoneksi (Siap Upload File!)";
+                statusText.innerText = "Google Apps Script Terkoneksi!";
             }
         }
     </script>
-</body>
-</html>
